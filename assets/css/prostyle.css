@@ -1,0 +1,50 @@
+.bkgrd {
+    background: rgba(4, 8, 243, 0.24);
+}
+
+.mrgpd {
+    margin: 0;
+    padding: 0;
+}
+
+.imgstudent {
+    height: 300px;
+    border-radius: 30%;
+    border: 5px solid gray;
+}
+
+.error {
+    color: #FF0000 !important;
+}
+
+input[type=text].error {
+    color: #000 !important;
+}
+
+input[type=email].error {
+    color: #000 !important;
+}
+
+.auth-left-wrapper {
+    overflow: hidden !important;
+    background-color: chartreuse !important;
+}
+
+img .img {
+    width: 250px;
+    height: 414px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
