@@ -80,7 +80,7 @@ if (isset($_REQUEST['login'])) {
                             <div class="row">
                                 <div class="col-sm-6 pr-md-0">
                                     <div class="auth-left-wrapper">
-                                        <img class="img " src="assets2\img\entrepreneur-icon-2.jpg".alt="#" style="  max-width:100%;max-hight:150%; margin:20%0 0 0">
+                                        <img class="img " src="assets2\img\entrepreneur-icon-2.jpg".alt="#" style="  max-width:100%;max-height:150%; margin:20%0 0 0">
 										
                                     </div>
                                 </div>
