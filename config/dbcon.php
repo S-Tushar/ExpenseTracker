@@ -4,7 +4,7 @@ include('config.php');
 
 
 //connection
-$conn = mysqli_connect(DB_HOST,DB_USER , DB_PASSWORD , DB_NAME);
+$conn = mysqli_connect(DB_HOST,DB_USER , DB_PASSWORD , DB_NAME) or die("Database is not connected");
 
 /*==================error function==========================*/
 $error_list = array();
