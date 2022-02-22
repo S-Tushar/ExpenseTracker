@@ -4,3 +4,6 @@ nav.sidebar > div.sidebar-header > a > img{
 .sidebar .sidebar-header .sidebar-brand {
     font-size: 18px;
 }
+.account_detail, .card_detail{
+    display: none;
+}
