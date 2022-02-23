@@ -1,5 +1,39 @@
 <?php
 	include 'config/dbcon.php';
+
+	$sql="select * from add_accounts where user_id=4";
+	$re=mysqli_query($conn,$sql);
+	$numOfRow=mysqli_num_rows($re);
+	$accounts_list=[];
+	$x = 0;
+	if($numOfRow>0){
+	while ($res=mysqli_fetch_assoc($re)){
+
+			switch($res['type']){
+				case 'CASH':
+					$accounts_list['CASH'][]=$res;
+					break;
+				case 'BANK_ACCOUNT':
+					$accounts_list['BANK_ACCOUNT'][]=$res;
+					break;
+				case 'CREDIT':
+					$accounts_list['CREDIT'][]=$res;
+					break;
+				case 'ASSET':
+					$accounts_list['ASSET'][]=$res;
+					break;
+				case 'DEPOSIT':
+					$accounts_list['DEPOSIT'][]=$res;
+					break;
+				default:
+					$accounts_list['OTHER'][]=$res;
+			}
+		}
+	}
+    
+    print_r($accounts_list);
+
+  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +70,11 @@
                             </h2>
                                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                    <p>Para1</p>
+                                    <p>
+                                        <?php
+                                          if
+                                        ?>
+                                    </p>
                                     </div>
                                 </div>
                     </div>

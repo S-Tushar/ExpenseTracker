@@ -1,6 +1,3 @@
-<?php
-	include 'config/dbcon.php';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,58 +35,51 @@
 								<a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#income" role="tab" aria-controls="contact" aria-selected="false">Income</a>
 							</li>
 						</ul>
-						<div class="tab-content border border-top-0 p-3" id="myTabContent">
-							<div class="tab-pane fade show active" id="expense" role="tabpanel" aria-labelledby="home-tab">
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="account_lists">From</label>
-											<select class="js-example-basic-single w-100" id="account_lists" name="account_lists">
-												<option value="1">USD, US Dollar</option>
-												<option value="2">AED, Emirati Dirham</option>
-												<option value="3">GBP, British Pound</option>
-												<option value="4">IDR, Indonesian Rupiah</option>
-												<option value="5" selected>INR, Indian Rupee</option>s
-												<option value="6">JPY, Japanese yen</option>
-											</select>
+						<form action="" method="">
+							<div class="tab-content border border-top-0 p-3" id="myTabContent">
+								<div class="tab-pane fade show active" id="expense" role="tabpanel" aria-labelledby="home-tab">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="account_lists">From</label>
+												<select class="js-example-basic-single w-100" id="account_lists" name="account_lists">
+													<option value="">--Select--</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6 align-self-end">
+											<div class="form-group">
+												<div class="btn-group">
+													<input type="number" class="form-control" id="currency_number" name="currency_number">
+													<select class="js-example-basic-single w-50" id="currency" name="currency">
+														<option value="USD">USD</option>
+														<option value="AED">AED</option>
+														<option value="GBP">GBP</option>
+														<option value="IDR">IDR</option>
+														<option value="INR" selected>INR</option>s
+														<option value="JPY">JPY</option>
+													</select>
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<div class="btn-group">
-												<input type="number" class="form-control" id="currency_number" name="currency_number">
-												<select class="js-example-basic-single w-50" id="currency" name="currency">
-													<option value="USD">USD</option>
-													<option value="AED">AED</option>
-													<option value="GBP">GBP</option>
-													<option value="IDR">IDR</option>
-													<option value="INR" selected>INR</option>s
-													<option value="JPY">JPY</option>
-												</select>
+									<div class="row">
+										<div class="col-md-6 grid-margin stretch-card">
+											<div class="card">
+												<div class="card-body">
+													<h6 class="card-title">Tags</h6>
+													<div>
+														<input name="tags" id="tags" value="" />
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-									<div class="form-group">
-										<label>Multiple select using select 2</label>
-										<select class="js-example-basic-multiple w-100" multiple="multiple">
-											<option value="TX">Texas</option>
-											<option value="WY">Wyoming</option>
-											<option value="NY">New York</option>
-											<option value="FL">Florida</option>
-											<option value="KN">Kansas</option>
-											<option value="HW">Hawaii</option>
-											<option value="HW">Delhi</option>
-										</select>
-									</div>
-									</div>
-								</div>
+								<div class="tab-pane fade" id="transfer" role="tabpanel" aria-labelledby="profile-tab">4556</div>
+								<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">789</div>
 							</div>
-							<div class="tab-pane fade" id="transfer" role="tabpanel" aria-labelledby="profile-tab">4556</div>
-							<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">789</div>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -104,5 +94,21 @@
 	<!-- core:js -->
 	<?php include 'layout/script.php'?>	
  	<!-- core:js ends -->
+	 <script>
+		$(function() {
+		'use strict';
+
+		$('#tags').tagsInput({
+			'width': '100%',
+			'height': '75%',
+			'interactive': true,
+			'defaultText': 'Add tags',
+			'removeWithBackspace': true,
+			'minChars': 0,
+			'maxChars': 20,
+			'placeholderColor': '#666666'
+		});
+		});
+	 </script>
 </body>
 </html>

@@ -6,6 +6,7 @@
 	<!-- inject:css -->
 	<link rel="stylesheet" href="assets/fonts/feather-font/css/iconfont.css">
 	<link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
+	<link rel="stylesheet" href="assets/vendors/jquery-tags-input/jquery.tagsinput.min.css">
 	<!-- endinject -->
 	<!-- Layout styles -->  
 	<link rel="stylesheet" href="assets/css/demo_1/style.css">

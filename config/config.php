@@ -24,9 +24,9 @@ const CURRENCY=[
     "INR" => "INR, Indian Rupee", 
     "JPY" => "JPY, Japanese yen"];
 const PAYMENT_METHOD=[
-    "cash" => "Cash",
-    "bank_account" => "Bank Account",
-    "credit" => "Credit",
-    "assest" => "Assest",
-    "deposit" => "Deposit"];
+    "CASH" => "Cash",
+    "BANK_ACCOUNT" => "Bank Account",
+    "CREDIT" => "Credit",
+    "ASSET" => "Asset",
+    "DEPOSIT" => "Deposit"];
 ?>

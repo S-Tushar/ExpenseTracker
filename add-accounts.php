@@ -93,13 +93,12 @@
 						</div>
 					</div>
 			</div>
-
+			</div>
+			
 			<!-- partial:../../partials/_footer.html -->
 			<?php include 'layout/footer.php'; ?>		
-			<!-- partial -->
-	
+			<!-- partial -->		
 		</div>
-	</div>
 
 	<!-- core:js -->
 	<?php include 'layout/script.php'?>	
