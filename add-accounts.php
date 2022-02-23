@@ -62,11 +62,11 @@
                                             </div>
                                             <div class="form-group account_detail">
                                                 <label for="account_number">Account Number</label>
-                                                <input id="account_number" class="form-control" name="account_number" type="number" placeholder="Account Number">
+                                                <input id="account_number" class="form-control" name="account_number" type="text" placeholder="Account Number">
                                             </div>
                                             <div class="form-group card_detail">
                                                 <label for="card_number">Card Number</label>
-                                                <input id="card_number" class="form-control" name="card_number" type="number" placeholder="Card Number">
+                                                <input id="card_number" class="form-control" name="card_number" type="text" placeholder="Card Number">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
