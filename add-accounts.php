@@ -7,16 +7,15 @@
 		$account_number=$_REQUEST['account_number'];
 		$card_number=$_REQUEST['card_number'];
 		$type=$_REQUEST['type'];
-		$sql="select * from add-accounts where user_id=4";
+		$sql="select * from add_accounts where user_id=4";
 		$re=mysqli_query($conn,$sql);
 		$numOfRow=mysqli_num_rows($re);
 	  
 		$query='';
 		if($numOfRow==0){
-			$query = "INSERT INTO `add_accounts` (`user_id`, `name`, `type`, `account_number`, `card_number`, `created_by`, `created_at`, `updated_at`) 
-			VALUES (4, $name, $type, $account_number, $card_number, 4, current_timestamp(), current_timestamp())";
+			$query = "INSERT INTO `add_accounts` (`user_id`, `name`, `type`, `account_number`, `card_number`, `created_by`, `created_at`, `updated_at`) VALUES (4, '$name', '$type', '$account_number', '$card_number', 4, current_timestamp(), current_timestamp())";
 		}else{
-			$query="update add-accounts set name='$name', type='$type', account_number='$account_number',card_number='$card_number', where user_id=4"; 
+			$query="update add_accounts set name='$name', type='$type', account_number='$account_number',card_number='$card_number' where user_id=4"; 
 		}
 		
 		$re=mysqli_query($conn,$query) or die(mysqli_error($conn));
@@ -24,6 +23,7 @@
 			header("location:add-accounts.php");
 		}
 	}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,15 +58,15 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="name">Name</label>
-                                                <input id="name" class="form-control" name="name" type="text" placeholder="Account holder name" required>
+                                                <input id="name" class="form-control" name="name" type="text" placeholder="Account holder name">
                                             </div>
                                             <div class="form-group account_detail">
                                                 <label for="account_number">Account Number</label>
-                                                <input id="account_number" class="form-control" name="account_number" type="text" placeholder="Account Number" required>
+                                                <input id="account_number" class="form-control" name="account_number" type="number" placeholder="Account Number">
                                             </div>
                                             <div class="form-group card_detail">
                                                 <label for="card_number">Card Number</label>
-                                                <input id="card_number" class="form-control" name="card_number" type="text" placeholder="Card Number" required>
+                                                <input id="card_number" class="form-control" name="card_number" type="number" placeholder="Card Number">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -74,11 +74,15 @@
                                                 <label>Type</label>
                                                 <select class="js-example-basic-single w-100" id="account_method" name="type">
 													<option value="" selected disabled>Please select a account method</option>
-                                                    <option value="cash">Cash</option>
-                                                    <option value="bank_account">Bank Account</option>
-                                                    <option value="credit">Credit</option>
-                                                    <option value="assest">Assest</option>
-                                                    <option value="deposit">Deposit</option>
+													<?php
+													foreach(PAYMENT_METHOD as $key=>$value){
+													?>
+
+													<option value="<?php echo $key;  ?>" <?php echo (isset($data['type']) && $data['type']==$key)?'selected':''; ?>><?php echo $value;  ?></option>
+
+													<?php
+													}
+													?>
                                                 </select>
                                             </div>
                                         </div>

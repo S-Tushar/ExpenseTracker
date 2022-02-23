@@ -22,5 +22,11 @@ const CURRENCY=[
     "IDR" => "GBP, British Pound", 
     "IDR" => "IDR, Indonesian Rupiah", 
     "INR" => "INR, Indian Rupee", 
-    "JPY" => "JPY, Japanese yen"]
+    "JPY" => "JPY, Japanese yen"];
+const PAYMENT_METHOD=[
+    "cash" => "Cash",
+    "bank_account" => "Bank Account",
+    "credit" => "Credit",
+    "assest" => "Assest",
+    "deposit" => "Deposit"];
 ?>
