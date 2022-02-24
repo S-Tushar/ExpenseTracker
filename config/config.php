@@ -29,4 +29,6 @@ const PAYMENT_METHOD=[
     "CREDIT" => "Credit",
     "ASSET" => "Asset",
     "DEPOSIT" => "Deposit"];
+const BANK_ACCOUNT="BANK_ACCOUNT";
+const CREDIT="CREDIT";
 ?>

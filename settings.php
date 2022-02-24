@@ -4,7 +4,7 @@
 
     if(isset($_REQUEST['submit'])){
 
-        die('retrived');
+        
             $base_currency=$_REQUEST['base_currency'];
             $additional_currency=$_REQUEST['additional_currency'];
             $date_format=$_REQUEST['date_format'];
