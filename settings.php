@@ -4,12 +4,13 @@
 
     if(isset($_REQUEST['submit'])){
 
+        
             $base_currency=$_REQUEST['base_currency'];
             $additional_currency=$_REQUEST['additional_currency'];
             $date_format=$_REQUEST['date_format'];
             $sql="select * from settings where user_id=4";
             $re=mysqli_query($conn,$sql);
-             $numOfRow=mysqli_num_rows($re);
+            $numOfRow=mysqli_num_rows($re);
           
             $query='';
             if($numOfRow==0){

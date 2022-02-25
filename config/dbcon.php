@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('config.php');
 
 
@@ -73,4 +74,9 @@ function validateEmpty($text)
         return true;
     }
     return false;
+}
+
+function old($key){
+      
+    return isset($_REQUEST[$key])?$_REQUEST['key']:'';
 }

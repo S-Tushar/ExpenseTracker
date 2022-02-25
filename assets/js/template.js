@@ -189,6 +189,25 @@
         }
       }
     });
+    $('#tags').tagsInput({
+      'width': '100%',
+      'height': '25%',
+      'interactive': true,
+      'defaultText': 'Add More',
+      'removeWithBackspace': true,
+      'placeholderColor': '#666666'
+    });
+    if ($('#datePickerExample').length) {
+      var date = new Date();
+      var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      $('#datePickerExample').datepicker({
+        format: "mm/dd/yyyy",
+        todayHighlight: true,
+        autoclose: true
+      });
+      $('#datePickerExample').datepicker('setDate', today);
+    }
+    $(":input").inputmask();
 
 
 
