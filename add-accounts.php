@@ -99,7 +99,7 @@
                                             <div class="form-group">
                                                 <label>Type</label>
                                                 <select class="js-example-basic-single w-100" id="account_method" name="type">
-													<option value="" selected disabled>Please select a account method</option>
+													<option value="" selected disabled>--Please select a account method--</option>
 													<?php
 													foreach(PAYMENT_METHOD as $key=>$value){
 													?>
