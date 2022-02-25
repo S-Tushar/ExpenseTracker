@@ -120,7 +120,7 @@ if ($numOfRow > 0) {
 								</form>
 							</div>
 							<div class="tab-pane fade" id="transfer" role="tabpanel" aria-labelledby="transfer-tab">
-								<form action="" method="" id="addincome">
+								<form action="" method="" id="addtransfer">
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
@@ -142,7 +142,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-6 align-self-end">
 											<div class="form-group">
 												<div class="btn-group">
-													<input type="number" class="form-control" id="amount" name="amount">
+													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
 													<select class="js-example-basic-single w-50" id="currency" name="currency">
 														<option value="USD">USD</option>
 														<option value="AED">AED</option>
@@ -176,7 +176,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-6 align-self-end">
 											<div class="form-group">
 												<div class="btn-group">
-													<input type="number" class="form-control" id="amount" name="amount">
+													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
 													<select class="js-example-basic-single w-50" id="currency" name="currency">
 														<option value="USD">USD</option>
 														<option value="AED">AED</option>
@@ -196,7 +196,7 @@ if ($numOfRow > 0) {
 								</form>
 							</div>
 							<div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
-								<form action="" method="" id="addtransfer">
+								<form action="" method="" id="addincome">
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
@@ -218,7 +218,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-6 align-self-end">
 											<div class="form-group">
 												<div class="btn-group">
-													<input type="number" class="form-control" id="amount" name="amount">
+													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
 													<select class="js-example-basic-single w-50" id="currency" name="currency">
 														<option value="USD">USD</option>
 														<option value="AED">AED</option>
@@ -272,8 +272,8 @@ if ($numOfRow > 0) {
 		});
 
 		$(document).ready(function() {
-			$('#addtransfer').validate();
-			$('#addtransfer').on('submit', function(e) {
+			$('#addtransfer,#addexpense,#addincome').validate();
+			$('#addtransfer,#addexpense,#addincome').on('submit', function(e) {
 				e.preventDefault();
 				alert($(this).serialize());
 				if ($(this).valid()) {
