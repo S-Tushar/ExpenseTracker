@@ -289,6 +289,18 @@ if ($numOfRow > 0) {
 	<?php include 'layout/script.php' ?>
 	<!-- core:js ends -->
 	<script>
+		$("#addexpense").validate({
+			rules: {
+				from_account: {required:true},
+				amount: {required:true},
+				transaction_date: {required:true},
+								
+			},
+			messages: {
+				
+				
+			}
+		});
 
     $(document).ready(function() {
 
@@ -301,7 +313,7 @@ if ($numOfRow > 0) {
 					order: [[1, 'asc']],
 					"columns": [
 							{ data:'from_account_name' ,title:"Form Account"},
-							{ data:'tag' ,title:"Form Account"},
+							//{ data:'tag' ,title:"Form Account"},
 
 							{ data:'amount' ,title:"Amount"},
 							

@@ -101,7 +101,7 @@ if(!isset($_SESSION['is_loggedin'])){
     <!-- core:js ends -->
 
     <!-- jquery form validation starts -->
-    <script src="assets/vendors/jquery-validation/jquery.validate.min.js"></script>
+  
     <!-- jquery form validation ends -->
     <script>
         $(document).ready(function(){

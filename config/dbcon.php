@@ -78,5 +78,5 @@ function validateEmpty($text)
 
 function old($key){
       
-    return isset($_REQUEST[$key])?$_REQUEST['key']:'';
+    return (isset($_REQUEST[$key]))?$_REQUEST[$key]:'';
 }

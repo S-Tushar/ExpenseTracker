@@ -25181,4 +25181,8 @@ div.tagsinput {
 .navbar{
   top:0;
 }
+.error{
+    color:#FF0000;
+    display:block;
+}
 /*# sourceMappingURL=../maps/demo_1/style.css.map */

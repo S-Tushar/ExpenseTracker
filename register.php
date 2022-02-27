@@ -15,10 +15,17 @@ if (isset($_REQUEST['login'])) {
     $email = filter_var($_REQUEST['email'], FILTER_SANITIZE_EMAIL);
     $password = filter_var($_REQUEST['password'], FILTER_SANITIZE_STRING);
     $error = [];
-    $sql = "insert into users (first_name,last_name,email,mobile_no,password) values ('$first_name','$last_name','$email','$mobile_no','$password')";
-    $s = mysqli_query($conn, $sql);
-    if ($s) {
-        header('location:login.php');
+     $sql="select *  from users where email='$email'";
+    $re= mysqli_query($conn, $sql);
+    $num_rows=mysqli_num_rows($re);
+    if($num_rows==0){
+        $sql = "insert into users (first_name,last_name,email,mobile_no,password) values ('$first_name','$last_name','$email','$mobile_no','$password')";
+        $s = mysqli_query($conn, $sql);
+        if ($s) {
+            header('location:login.php');
+        }
+    }else{
+        $error['email']="Email Id already in use.";
     }
 }
 ?>
@@ -95,23 +102,25 @@ if (isset($_REQUEST['login'])) {
                                         <form class="forms-sample" method="post" id="signupForm">
                                             <div class="form-group">
                                                 <label for="exampleInputfname">First Name</label>
-                                                <input type="text" name="fname" class="form-control"  placeholder="First name" required>
+                                                <input type="text" name="fname" class="form-control"  placeholder="First name" value="<?php echo old('fname'); ?>" required>
+                                                
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputlname">Last Name</label>
-                                                <input type="text" name="lname" class="form-control"  placeholder="Last Name" required>
+                                                <input type="text" name="lname" class="form-control"  placeholder="Last Name" value="<?php echo old('lname'); ?>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" name="email" class="form-control"  placeholder="Email" required>
+                                                <input type="email" name="email" class="form-control"  placeholder="Email" required value="<?php echo old('email'); ?>">
+                                                <?php echo isset($error['email'])?errormessage($error,'email'):''; ?>
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Mobile NO</label>
-                                                <input type="text" name="mobile_no" class="form-control"  placeholder="Mobile No" >
+                                                <input type="text" name="mobile_no" class="form-control"  placeholder="Mobile No" value="<?php echo old('mobile_no'); ?>" >
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Password</label>
-                                                <input type="password" name="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password" placeholder="Password" required>
+                                                <input type="password" name="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password" placeholder="Password" required >
                                             </div>
 
                                             <div class="mt-3">

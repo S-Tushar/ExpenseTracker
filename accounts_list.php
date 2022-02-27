@@ -78,7 +78,15 @@ if ($numOfRow > 0) {
             <div class="page-content">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Account Lists</h4>
+                        <div class="row justify-content-between mb-3">
+                            <div class="col-md-5">
+                            <h4 class="card-title">Account Lists</h4>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end">
+                            <button class="btn btn-primary">Add Account</button>
+                            </div>
+                        </div>
+                        
                         <?php include 'include/component/alert_message.php' ?>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
