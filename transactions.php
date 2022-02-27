@@ -299,6 +299,7 @@ if ($numOfRow > 0) {
 
 					
     			});
+	});
 
 		$(function() {
 			'use strict';
