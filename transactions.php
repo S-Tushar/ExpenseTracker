@@ -262,6 +262,18 @@ if ($numOfRow > 0) {
 						</div>
 					</div>
 				</div>
+				<div class="row mt-4">
+					<div class="col-md-12 grid-margin stretch-card">
+						<div class="card">
+							<div class="card-body">
+								<h6 class="card-title">TRANSACTIONS LIST</h6>
+									<table class="table table-bordered" id="transaction_list">
+										
+									</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<!-- footer.html -->
@@ -275,6 +287,19 @@ if ($numOfRow > 0) {
 	<?php include 'layout/script.php' ?>
 	<!-- core:js ends -->
 	<script>
+
+    $(document).ready(function() {
+
+				$('#transaction_list').DataTable( {
+        			"ajax": {
+						url:'transaction_list.php',
+						method:"POST.php",
+						data:{"user_id":4}
+					},
+
+					
+    			});
+
 		$(function() {
 			'use strict';
 			if ($('#datePickerExample1,#datePickerExample2,#datePickerExample3').length) {
@@ -287,7 +312,6 @@ if ($numOfRow > 0) {
 				});
 				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker('setDate', today);
 			}
-
 			$('#addtransfer,#addexpense,#addincome').validate();
 			$('#addtransfer,#addexpense,#addincome').on('submit', function(e) {
 				e.preventDefault();

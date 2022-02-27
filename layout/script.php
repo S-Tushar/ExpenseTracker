@@ -10,6 +10,8 @@
 	<script src="assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 	<script src="assets/vendors/inputmask/jquery.inputmask.min.js"></script>
 	<script src="assets/vendors/jquery-validation/jquery.validate.min.js"></script>
+	<script src="assets/vendors/datatables.net/jquery.dataTables.js"></script>
+	<script src="assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 	<script src="assets/js/template.js"></script>
 
 	<!-- endinject -->
