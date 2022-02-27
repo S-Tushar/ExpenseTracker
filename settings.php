@@ -1,6 +1,8 @@
 <?php
 	include 'config/dbcon.php';
-
+    if(!isset($_SESSION['is_loggedin'])){
+        header('location:login.php');
+}
 
     if(isset($_REQUEST['submit'])){
 
@@ -8,7 +10,7 @@
             $base_currency=$_REQUEST['base_currency'];
             $additional_currency=$_REQUEST['additional_currency'];
             $date_format=$_REQUEST['date_format'];
-            $sql="select * from settings where user_id=4";
+            $sql="select * from settings where user_id='".$_SESSION['id']."'";
             $re=mysqli_query($conn,$sql);
             $numOfRow=mysqli_num_rows($re);
           
@@ -16,7 +18,7 @@
             if($numOfRow==0){
                 $query="insert into settings (base_currency,additional_currency,date_format,user_id,created_by) values ('$base_currency','$additional_currency','$date_format',4,4)";
             }else{
-                $query="update settings set base_currency='$base_currency',additional_currency='$additional_currency',date_format='$date_format' where user_id=4"; 
+                $query="update settings set base_currency='$base_currency',additional_currency='$additional_currency',date_format='$date_format' where user_id='".$_SESSION['id']."'"; 
             }
             
             
@@ -25,7 +27,7 @@
                 header("location:settings.php");
             }
     }
-    $sql="select * from settings where user_id=4";
+    $sql="select * from settings where '".$_SESSION['id']."'";
     $re=mysqli_query($conn,$sql);
     $numOfRow=mysqli_num_rows($re);
     

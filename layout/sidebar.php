@@ -14,7 +14,7 @@
         <ul class="nav">
           
           <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="dashboard.php" class="nav-link">
               <i class="link-icon" data-feather="home"></i>
               <span class="link-title">Dashboard</span>
             </a>
@@ -33,7 +33,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link d-none">
               <i class="link-icon" data-feather="trending-up"></i>
               <span class="link-title">Report</span>
             </a>

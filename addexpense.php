@@ -1,6 +1,8 @@
 <?php
     include 'config/dbcon.php';
-
+    if(!isset($_SESSION['is_loggedin'])){
+      header('location:login.php');
+}
     
 
   //  if(isset($_REQUEST['add_expense'])){

@@ -1,10 +1,6 @@
 <?php
-
-if (isset($_SESSION['is_loggedin'])) {
-
-    header('location:dashboard.php');
-}
 include('config/dbcon.php');
+
 
 if (isset($_REQUEST['login'])) {
     $email = filter_var($_REQUEST['email'], FILTER_SANITIZE_EMAIL);
@@ -19,9 +15,10 @@ if (isset($_REQUEST['login'])) {
         $success = "login";
         $_SESSION['name'] = $res['first_name'] . ' ' .$res['last_name'];
         $_SESSION['id'] = $res['id'];
-        $_SESSION['email_id'] = $res['email_id'];
+        $_SESSION['email_id'] = $res['email'];
         $_SESSION['role_name'] = $res['role_name'];
         $_SESSION['is_loggedin'] = 1;
+        
 
         if (hasRole(['admin'])) {
             header('location: dashboard.php');
