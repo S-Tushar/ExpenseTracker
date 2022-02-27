@@ -101,22 +101,26 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-
 												<input class="form-control" name="tags" id="tags" value="" />
+											</div>
+											<div class="form-group">
+												<textarea id="maxlength-textarea" class="form-control" maxlength="100" rows="6" placeholder="This textarea has a limit of 100 chars." name="notes"></textarea>
 											</div>
 										</div>
 										<div class="col-md-6">
-											<div class="input-group date datepicker" id="datePickerExample">
+											<div class="input-group date datepicker" id="datePickerExample1">
 												<input type="text" class="form-control" name="transaction_date"><span class="input-group-addon"><i data-feather="calendar"></i></span>
 											</div>
 										</div>
 									</div>
-
-									<input type="hidden" name="transaction_type" value="EXPENSE">
-									<input type="hidden" name="debit_credit" value="D">
-									<input type="hidden" name="user_id" value="4">
-									<input class="btn btn-primary" type="submit" value="Add Expense" name="add_expense">
-
+									<div class="row">
+										<div class="col-md-4">
+											<input type="hidden" name="transaction_type" value="EXPENSE">
+											<input type="hidden" name="debit_credit" value="D">
+											<input type="hidden" name="user_id" value="4">
+											<input class="btn btn-primary" type="submit" value="Add Expense" name="add_expense">
+										</div>
+									</div>
 								</form>
 							</div>
 							<div class="tab-pane fade" id="transfer" role="tabpanel" aria-labelledby="transfer-tab">
@@ -175,24 +179,23 @@ if ($numOfRow > 0) {
 										</div>
 										<div class="col-md-6 align-self-end">
 											<div class="form-group">
-												<div class="btn-group">
-													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
-													<select class="js-example-basic-single w-50" id="currency" name="currency">
-														<option value="USD">USD</option>
-														<option value="AED">AED</option>
-														<option value="GBP">GBP</option>
-														<option value="IDR">IDR</option>
-														<option value="INR" selected>INR</option>s
-														<option value="JPY">JPY</option>
-													</select>
+												<div class="input-group date datepicker" id="datePickerExample2">
+													<input type="text" class="form-control" name="transaction_date"><span class="input-group-addon"><i data-feather="calendar"></i></span>
 												</div>
 											</div>
 										</div>
 									</div>
-									<input type="hidden" name="transaction_type" value="TRANSFER">
-									<input type="hidden" name="debit_credit" value="D">
-									<input type="hidden" name="user_id" value="4">
-									<input class="btn btn-primary" type="submit" value="Add Transfer" name="add_expense">
+									<div class="row">
+										<div class="col-md-6">
+											<textarea id="maxlength-textarea" class="form-control" maxlength="100" rows="4" name="notes" placeholder="This textarea has a limit of 100 chars."></textarea>
+										</div>
+										<div class="col-md-4">
+											<input type="hidden" name="transaction_type" value="TRANSFER">
+											<input type="hidden" name="debit_credit" value="D">
+											<input type="hidden" name="user_id" value="4">
+											<input class="btn btn-primary" type="submit" value="Add Transfer" name="add_expense">
+										</div>
+									</div>
 								</form>
 							</div>
 							<div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
@@ -232,21 +235,28 @@ if ($numOfRow > 0) {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-6 grid-margin stretch-card">
-											<div class="card">
-												<div class="card-body">
-
-													<div>
-														<input name="tags" id="tags" value="" />
-													</div>
-												</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<input class="form-control" name="tags" id="tags" value="" />
+											</div>
+											<div class="form-group">
+												<textarea id="maxlength-textarea" class="form-control" maxlength="100" rows="5" name="notes" placeholder="This textarea has a limit of 100 chars."></textarea>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="input-group date datepicker" id="datePickerExample3">
+												<input type="text" class="form-control" name="transaction_date"><span class="input-group-addon"><i data-feather="calendar"></i></span>
 											</div>
 										</div>
 									</div>
-									<input type="hidden" name="transaction_type" value="INCOME">
-									<input type="hidden" name="debit_credit" value="C">
-									<input type="hidden" name="user_id" value="4">
-									<input class="btn btn-primary" type="submit" value="Add income" name="add_expense">
+									<div class="row">
+										<div class="col-md-4">
+											<input type="hidden" name="transaction_type" value="INCOME">
+											<input type="hidden" name="debit_credit" value="C">
+											<input type="hidden" name="user_id" value="4">
+											<input class="btn btn-primary" type="submit" value="Add income" name="add_expense">
+										</div>
+									</div>
 								</form>
 							</div>
 						</div>
@@ -277,9 +287,8 @@ if ($numOfRow > 0) {
 	<?php include 'layout/script.php' ?>
 	<!-- core:js ends -->
 	<script>
-		
 
-		$(document).ready(function() {
+    $(document).ready(function() {
 
 				$('#transaction_list').DataTable( {
         			"ajax": {
@@ -291,23 +300,30 @@ if ($numOfRow > 0) {
 					
     			});
 
+		$(function() {
+			'use strict';
+			if ($('#datePickerExample1,#datePickerExample2,#datePickerExample3').length) {
+				var date = new Date();
+				var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker({
+					format: "mm/dd/yyyy",
+					todayHighlight: true,
+					autoclose: true
+				});
+				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker('setDate', today);
+			}
 			$('#addtransfer,#addexpense,#addincome').validate();
 			$('#addtransfer,#addexpense,#addincome').on('submit', function(e) {
 				e.preventDefault();
-				alert($(this).serialize());
+				// alert($(this).serialize());
 				if ($(this).valid()) {
 					$.ajax({
 						url: "addexpense.php",
 						method: "POST",
 						data: $(this).serialize(),
-						success: function(response) {
-
-						}
+						success: function(response) {}
 					})
 				}
-
-
-
 				return false;
 
 			});
