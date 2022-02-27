@@ -1,6 +1,8 @@
 <?php
 	include 'config/dbcon.php';
-
+	if(!isset($_SESSION['is_loggedin'])){
+        header('location:login.php');
+}
 	if(isset($_REQUEST['submit'])){
 
 		$name=$_REQUEST['name'];
@@ -9,7 +11,7 @@
 		$type=$_REQUEST['type'];
 		$numOfRow=0;
 		if($type==BANK_ACCOUNT){
-		$sql="select * from add_accounts where user_id=4 and account_number='$account_number' and (type='".BANK_ACCOUNT."')";
+		$sql="select * from add_accounts where user_id='".$_SESSION['id']."' and account_number='$account_number' and (type='".BANK_ACCOUNT."')";
 		$re=mysqli_query($conn,$sql);
 		 $numOfRow=mysqli_num_rows($re);
 		}
@@ -32,7 +34,7 @@
 			//exit;
 		}
 		/*else{
-			$query="update add_accounts set name='$name', type='$type', account_number='$account_number',card_number='$card_number' where user_id=4"; 
+			$query="update add_accounts set name='$name', type='$type', account_number='$account_number',card_number='$card_number' where user_id='".$_SESSION['id']."'"; 
 		}*/
 		
 		

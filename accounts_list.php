@@ -1,6 +1,8 @@
 <?php
 include 'config/dbcon.php';
-
+if(!isset($_SESSION['is_loggedin'])){
+    header('location:login.php');
+}
 if(isset($_REQUEST['did'])){
     $sql="delete from add_accounts where id='".$_REQUEST['did']."'";
     $re=mysqli_query($conn,$sql);
@@ -17,7 +19,7 @@ if(isset($_REQUEST['did'])){
 }
 
 
-$sql = "select * from add_accounts where user_id=4";
+$sql = "select * from add_accounts where user_id='".$_SESSION['id']."'";
 $re = mysqli_query($conn, $sql);
 $numOfRow = mysqli_num_rows($re);
 $accounts_list = [];

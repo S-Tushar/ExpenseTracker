@@ -1,6 +1,8 @@
 <?php
 include 'config/dbcon.php';
-
+if(!isset($_SESSION['is_loggedin'])){
+	header('location:login.php');
+}
 if (isset($_REQUEST['submit'])) {
 
 	$add_expense = $_REQUEST['add_expense'];
@@ -8,7 +10,7 @@ if (isset($_REQUEST['submit'])) {
 	$add_income = $_REQUEST['add_income'];
 }
 
-$sql = "select id,name,type from add_accounts where user_id=4";
+$sql = "select id,name,type from add_accounts where user_id='".$_SESSION['id']."'";
 $re = mysqli_query($conn, $sql);
 $numOfRow = mysqli_num_rows($re);
 $accounts_list = [];
@@ -117,7 +119,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-4">
 											<input type="hidden" name="transaction_type" value="EXPENSE">
 											<input type="hidden" name="debit_credit" value="D">
-											<input type="hidden" name="user_id" value="4">
+											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id'];?>">
 											<input class="btn btn-primary" type="submit" value="Add Expense" name="add_expense">
 										</div>
 									</div>
@@ -192,7 +194,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-4">
 											<input type="hidden" name="transaction_type" value="TRANSFER">
 											<input type="hidden" name="debit_credit" value="D">
-											<input type="hidden" name="user_id" value="4">
+											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id'];?>">
 											<input class="btn btn-primary" type="submit" value="Add Transfer" name="add_expense">
 										</div>
 									</div>
@@ -253,7 +255,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-4">
 											<input type="hidden" name="transaction_type" value="INCOME">
 											<input type="hidden" name="debit_credit" value="C">
-											<input type="hidden" name="user_id" value="4">
+											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id'];?>">
 											<input class="btn btn-primary" type="submit" value="Add income" name="add_expense">
 										</div>
 									</div>
@@ -292,10 +294,19 @@ if ($numOfRow > 0) {
 
 				$('#transaction_list').DataTable( {
         			"ajax": {
-						url:'transaction_list.php',
-						method:"POST.php",
-						data:{"user_id":4}
+						url:'transaction_list.php?',
+						method:"POST",
+						data:{"user_id":<?php echo $_SESSION['id'];?>}
 					},
+					order: [[1, 'asc']],
+					"columns": [
+							{ data:'from_account_name' ,title:"Form Account"},
+							{ data:'tag' ,title:"Form Account"},
+
+							{ data:'amount' ,title:"Amount"},
+							
+							
+						]
 
 					
     			});

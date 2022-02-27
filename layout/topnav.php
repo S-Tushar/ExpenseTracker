@@ -6,7 +6,7 @@
 	<div class="navbar-content">
 		
 		<ul class="navbar-nav">
-			<li class="nav-item dropdown nav-notifications">
+			<li class="nav-item dropdown nav-notifications d-none">
 				<a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<i data-feather="bell"></i>
 					<div class="indicator">
@@ -80,14 +80,14 @@
 							<img src="https://via.placeholder.com/80x80" alt="">
 						</div>
 						<div class="info text-center">
-							<p class="name font-weight-bold mb-0">{Login user}</p>
-							<p class="email text-muted mb-3">{Login User Email}</p>
+							<p class="name font-weight-bold mb-0"><?php echo  $_SESSION['name'] ?></p>
+							<p class="email text-muted mb-3"><?php echo  $_SESSION['email_id'] ?></p>
 						</div>
 					</div>
 					<div class="dropdown-body">
 						<ul class="profile-nav p-0 pt-3">
 						
-							<li class="nav-item">
+							<li class="nav-item d-none">
 								<a href="javascript:;" class="nav-link">
 									<i data-feather="edit"></i>
 									<span>Edit Profile</span>
@@ -95,7 +95,7 @@
 							</li>
 							
 							<li class="nav-item">
-								<a href="javascript:;" class="nav-link">
+								<a href="logout.php" class="nav-link">
 									<i data-feather="log-out"></i>
 									<span>Log Out</span>
 								</a>
