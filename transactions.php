@@ -382,7 +382,7 @@ if ($numOfRow > 0) {
 					format: "mm/dd/yyyy",
 					todayHighlight: true,
 					autoclose: true,
-					startDate: today
+					endDate: today
 				});
 				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker('setDate', today);
 				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker('minDate', today);
@@ -401,7 +401,7 @@ if ($numOfRow > 0) {
 							console.log(form);
 							form[0].reset();
 							
-							trans.ajax().reload();
+							trans.ajax.reload();
 						}
 					})
 				}
@@ -425,6 +425,7 @@ if ($numOfRow > 0) {
 					}
 				});
 			} else {
+				$('#from_amount').html('');
 				$('#ac').hide();
 			}
 		});

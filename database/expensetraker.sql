@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2022 at 05:15 PM
+-- Generation Time: Mar 01, 2022 at 04:54 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.11
 
@@ -44,15 +44,11 @@ CREATE TABLE `add_accounts` (
 --
 
 INSERT INTO `add_accounts` (`id`, `user_id`, `name`, `type`, `account_number`, `card_number`, `created_by`, `created_at`, `updated_at`) VALUES
-(23, 4, 'new01', 'CASH', 0, 0, '4', '2022-02-24 13:13:26', '2022-02-24 18:43:26'),
-(24, 4, 'BA1', 'BANK_ACCOUNT', 1, 0, '4', '2022-02-24 13:21:43', '2022-02-24 18:51:43'),
-(25, 4, 'BA2', 'BANK_ACCOUNT', 200, 0, '4', '2022-02-24 13:22:25', '2022-02-24 18:52:25'),
-(27, 4, 'depo1', 'DEPOSIT', 3000, 0, '4', '2022-02-24 13:42:26', '2022-02-24 19:12:26'),
-(32, 4, 'test3', 'CASH', 0, 0, '4', '2022-02-25 06:56:41', '2022-02-25 12:26:41'),
-(33, 4, 'expense1', 'CASH', 0, 0, '4', '2022-02-25 14:20:00', '2022-02-25 19:50:00'),
-(34, 4, 'transfer', 'BANK_ACCOUNT', 1020304050, 0, '4', '2022-02-25 14:20:45', '2022-02-25 19:50:45'),
-(35, 4, 'income', 'DEPOSIT', 0, 0, '4', '2022-02-25 14:21:06', '2022-02-25 19:51:06'),
-(36, 4, 'new01', 'ASSET', 0, 0, '4', '2022-02-26 13:03:22', '2022-02-26 18:33:22');
+(37, 4, 'My Wallet', 'CASH', 0, 0, '4', '2022-03-01 15:47:25', '2022-03-01 21:17:25'),
+(38, 4, 'SBI Bank Account - 2202', 'BANK_ACCOUNT', 2147483647, 0, '4', '2022-03-01 15:47:59', '2022-03-01 21:17:59'),
+(39, 4, 'HDFC Credit Card- 7362', 'CREDIT', 0, 2147483647, '4', '2022-03-01 15:48:40', '2022-03-01 21:18:40'),
+(40, 4, 'PO - fixed Deposit', 'DEPOSIT', 0, 0, '4', '2022-03-01 15:49:13', '2022-03-01 21:19:13'),
+(41, 4, 'My Cash Asset', 'ASSET', 0, 0, '4', '2022-03-01 15:49:32', '2022-03-01 21:19:32');
 
 -- --------------------------------------------------------
 
@@ -76,7 +72,26 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `user_id`, `base_currency`, `additional_currency`, `date_format`, `created_by`, `createtd_at`, `updated_at`) VALUES
-(3, '4', 'IDR', 'JPY', 'MM-DD-YYYY', '4', '2022-02-18 12:42:41', '2022-02-26 18:32:27');
+(3, '4', 'INR', '', 'd-m-Y', '4', '2022-02-18 12:42:41', '2022-03-01 21:17:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL,
+  `tags` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`id`, `tags`) VALUES
+(1, 'Income'),
+(2, 'Food');
 
 -- --------------------------------------------------------
 
@@ -93,6 +108,7 @@ CREATE TABLE `transactions` (
   `to_account` varchar(50) DEFAULT NULL,
   `transaction_type` varchar(10) DEFAULT NULL,
   `debit_credit` varchar(20) DEFAULT NULL,
+  `tags` text NOT NULL,
   `notes` text DEFAULT NULL,
   `transaction_date` date DEFAULT NULL,
   `created_by` varchar(50) DEFAULT NULL,
@@ -104,15 +120,11 @@ CREATE TABLE `transactions` (
 -- Dumping data for table `transactions`
 --
 
-INSERT INTO `transactions` (`id`, `user_id`, `from_account`, `amount`, `currency`, `to_account`, `transaction_type`, `debit_credit`, `notes`, `transaction_date`, `created_by`, `created_at`, `updated_by`) VALUES
-(7, '4', '33', '1.00', 'INR', '', 'EXPENSE', 'D', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, '4', '35', '200.00', 'INR', '', 'INCOME', 'C', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, '4', '34', '200.00', 'USD', '34', 'TRANSFER', 'D', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, '4', '23', '1.00', 'USD', '', 'EXPENSE', 'D', '', '2022-02-25', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, '4', '23', '200.00', 'INR', '23', 'TRANSFER', 'D', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, '4', '23', '8.00', 'INR', '', 'INCOME', 'C', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(14, '4', '23', '8.00', 'INR', '', 'INCOME', 'C', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, '4', '23', '8555555.00', 'INR', '', 'INCOME', 'C', '', '0000-00-00', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `transactions` (`id`, `user_id`, `from_account`, `amount`, `currency`, `to_account`, `transaction_type`, `debit_credit`, `tags`, `notes`, `transaction_date`, `created_by`, `created_at`, `updated_by`) VALUES
+(26, '4', '37', '500.00', 'INR', '', 'INCOME', 'C', 'Income', '', '2022-02-28', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(27, '4', '41', '1000.00', 'INR', '', 'INCOME', 'C', 'Income', '', '2022-02-28', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(28, '4', '37', '50.00', 'INR', '', 'EXPENSE', 'D', 'food', '', '2022-03-01', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(29, '4', '37', '100.00', 'INR', '38', 'TRANSFER', 'D', '', '', '2022-03-01', '4', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -135,8 +147,6 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `mobile_no`, `password`, `role_name`) VALUES
-(1, 'tarang', 'Raval', 'tarang.raval5@gmail.com', 9429291772, '1234567890', 'Customer'),
-(2, 't', 't', 't@yopmail.com', 9429291772, 'Test@123', 'Customer'),
 (4, 'abc', 'xyz', 'abc@gmail.com', 8686969612, '12345', 'Customer');
 
 --
@@ -153,6 +163,12 @@ ALTER TABLE `add_accounts`
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tags`
+--
+ALTER TABLE `tags`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -175,7 +191,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `add_accounts`
 --
 ALTER TABLE `add_accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -184,10 +200,16 @@ ALTER TABLE `settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `users`

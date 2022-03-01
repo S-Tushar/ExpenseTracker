@@ -82,7 +82,7 @@ function getrow($type, $user_id, $conn)
                                 ?>
                                 <div class="form-group">
                                     <select class="form-control" id="tags2" onchange="callajax()">
-                                        <option value="">select </option>
+                                        <option value="">Select Tags </option>
                                         <?php
                                         if ($numOfRow2 > 0) {
                                             while ($r = mysqli_fetch_assoc($re2)) {
