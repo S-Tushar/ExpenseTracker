@@ -24,18 +24,19 @@ $GLOBALS['conn'] = $conn;
 if (!$conn) {
     die('database is not connected');
 }
-/*
-$s = "SELECT * FROM site_options LIMIT 1";
-$r = mysqli_query($GLOBALS['conn'], $s);
-$GLOBALS['site_options'] = mysqli_fetch_assoc($r);
-*/
+
 /*======= Date format ========*/
-function dateformat($string)
+function dateformat($string,$user_id='')
 {
-    if ($GLOBALS['site_options']) {
+
+    $s = "SELECT * FROM settings  where user_id='".(!empty($user_id)?$user_id:$_SESSION['id'])."'";
+    $r = mysqli_query($GLOBALS['conn'], $s);
+    $GLOBALS['setting'] = mysqli_fetch_assoc($r);
+    
+    if (!empty($GLOBALS['setting'])) {
 
         return (!empty($string) && $string != "0000-00-00" && strtotime($string)) ?
-            date($GLOBALS['site_options']['date_format'], strtotime($string)) : '';
+            date($GLOBALS['setting']['date_format'], strtotime($string)) : '';
     } else {
         return '';
     }

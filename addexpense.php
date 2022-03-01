@@ -1,8 +1,6 @@
 <?php
     include 'config/dbcon.php';
-    if(!isset($_SESSION['is_loggedin'])){
-      header('location:login.php');
-}
+ 
     
 
   //  if(isset($_REQUEST['add_expense'])){
@@ -15,10 +13,13 @@
         $transaction_type=setNull($_REQUEST['transaction_type']);
         $debit_credit=setNull($_REQUEST['debit_credit']);
         $notes=setNull((isset($_REQUEST['notes'])?$_REQUEST['notes']:''));
+        $tags=setNull((isset($_REQUEST['tags'])?$_REQUEST['tags']:''));
         $transaction_date=setNull((isset($_REQUEST['transaction_date'])?date('Y-m-d',strtotime($_REQUEST['transaction_date'])):''));
         $user_id=setNull($_REQUEST['user_id']);
 
-        $query= "insert into transactions (user_id,from_account,amount,currency,to_account,transaction_type,debit_credit,notes,transaction_date,created_by,created_at,updated_by) values ('$user_id','$from_account','$amount','$currency','$to_account','$transaction_type','$debit_credit','$notes','$transaction_date',4,'current_timestamp()','NULL')";
+      
+
+        $query= "insert into transactions (user_id,from_account,amount,currency,to_account,transaction_type,debit_credit,tags,notes,transaction_date,created_by,created_at,updated_by) values ('$user_id','$from_account','$amount','$currency','$to_account','$transaction_type','$debit_credit','$tags','$notes','$transaction_date',4,'current_timestamp()','NULL')";
         
         $re=mysqli_query($conn,$query) or die(mysqli_error($conn));
       //  }

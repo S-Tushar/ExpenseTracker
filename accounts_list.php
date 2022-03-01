@@ -83,7 +83,7 @@ if ($numOfRow > 0) {
                             <h4 class="card-title">Account Lists</h4>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end">
-                            <button class="btn btn-primary">Add Account</button>
+                            <a href="add-accounts.php"><button class="btn btn-primary">Add Account</button></a>
                             </div>
                         </div>
                         

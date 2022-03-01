@@ -9,12 +9,10 @@ const LOGO_PATH = '
 <img src="assets2/img/logo2.png" alt="">
 <span>Expense<span class="text-danger">Traker</span></span>';
 const DB_DATE_FORMAT = [
-    "DD-MM-YYYY" => "DD-MM-YYYY",
-    "MM-DD-YYYY" => "MM-DD-YYYY",
-    "YYYY-MM-DD" => "YYYY-MM-DD",
-    "MM-DD-YY"   => "MM-DD-YY",
-    "DD-MM-YY"   => "DD-MM-YY",
-    "YY-MM-DD"   => "YY-MM-DD"];
+    "d-m-Y" => "DD-MM-YYYY",
+    "m-d-Y" => "MM-DD-YYYY",
+    "Y-m-D" => "YYYY-MM-DD",
+    "y-m-d"   => "YY-MM-DD"];
 const CURRENCY=[
     "USD" => "USD, US Dollar" , 
     "AED" => "AED, Emirati Dirham", 

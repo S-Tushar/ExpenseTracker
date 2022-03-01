@@ -23,7 +23,7 @@
             <a href="transactions.php" class="nav-link">
             <i class="link-icon" data-feather="repeat"></i>
               
-              <span class="link-title">Transaction</span>
+              <span class="link-title">Daily Expense</span>
             </a>
           </li>
           <li class="nav-item">

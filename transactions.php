@@ -66,11 +66,12 @@ if ($numOfRow > 0) {
 							<div class="tab-pane fade show active" id="expense" role="tabpanel" aria-labelledby="expense-tab">
 								<form method="post" id="addexpense">
 									<div class="row">
+										<div class="col-md-12 text-right"><span id="ac" style="display: none;">Account Income &nbsp; &nbsp;<span id="from_amount"></span></span></div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="account_lists">From</label>
+												
 												<select class="js-example-basic-single w-100" id="account_lists" name="from_account">
-													<option value="">--Select--</option>
+													<option value="">--Select Account--</option>
 
 													<?php
 													if (!empty($accounts_list)) {
@@ -85,7 +86,9 @@ if ($numOfRow > 0) {
 											</div>
 										</div>
 										<div class="col-md-6 align-self-end">
+											
 											<div class="form-group">
+												
 												<div class="btn-group">
 													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
 													<select class="js-example-basic-single w-50" id="currency" name="currency">
@@ -103,7 +106,7 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<input class="form-control" name="tags" id="tags" value="" />
+												<input class="form-control tags" name="tags" id="tags" value="" />
 											</div>
 											<div class="form-group">
 												<textarea id="maxlength-textarea" class="form-control" maxlength="100" rows="6" placeholder="This textarea has a limit of 100 chars." name="notes"></textarea>
@@ -130,9 +133,9 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="account_lists">From</label>
-												<select class="js-example-basic-single w-100" id="account_lists" name="from_account">
-													<option value="">--Select--</option>
+												
+												<select class="js-example-basic-single w-100"  name="from_account">
+													<option value="">--Select Account--</option>
 													<?php
 													if (!empty($accounts_list)) {
 														foreach ($accounts_list as $res) {
@@ -164,9 +167,9 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="account_lists">To</label>
-												<select class="js-example-basic-single w-100" id="account_lists" name="to_account">
-													<option value="">--Select--</option>
+												
+												<select class="js-example-basic-single w-100"  name="to_account">
+													<option value="">--To Account--</option>
 													<?php
 													if (!empty($accounts_list)) {
 														foreach ($accounts_list as $res) {
@@ -205,9 +208,9 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="account_lists">From</label>
-												<select class="js-example-basic-single w-100" id="account_lists" name="from_account">
-													<option value="">--Select--</option>
+												
+												<select class="js-example-basic-single w-100"  name="from_account">
+													<option value="">--Select Account--</option>
 													<?php
 													if (!empty($accounts_list)) {
 														foreach ($accounts_list as $res) {
@@ -239,7 +242,7 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<input class="form-control" name="tags" id="tags" value="" />
+												<input class="form-control tags" name="tags" id="tags" value="" />
 											</div>
 											<div class="form-group">
 												<textarea id="maxlength-textarea" class="form-control" maxlength="100" rows="5" name="notes" placeholder="This textarea has a limit of 100 chars."></textarea>
@@ -289,17 +292,36 @@ if ($numOfRow > 0) {
 	<?php include 'layout/script.php' ?>
 	<!-- core:js ends -->
 	<script>
+		$.validator.addMethod("lessThan",
+			function (value, element, param) {
+				var otherElement =$('#from_amount').text() ;
+
+				value=value.replace(/[,₹]/ig,'');
+				otherElement=otherElement.replace(/[,₹]/ig,'');
+					console.log(otherElement);
+				return Number(value) <= Number(otherElement);
+			},'Please enter a Amount less than or equal to '+(($('#from_amount').text())?$('#from_amount').text():'0.00'));
+		
 		$("#addexpense").validate({
 			rules: {
 				from_account: {required:true},
-				amount: {required:true},
+				amount: {required:true,lessThan:true},
 				transaction_date: {required:true},
 								
 			},
 			messages: {
 				
 				
-			}
+			}, 
+			errorPlacement: function(error, element) {
+				console.log(element.attr('name'));
+				if (element.attr('name') == 'amount') {
+					error.insertAfter(element.parent());
+				}
+				else {
+					error.insertAfter(element);
+				}
+        	}
 		});
 
     $(document).ready(function() {
@@ -313,8 +335,9 @@ if ($numOfRow > 0) {
 					order: [[1, 'asc']],
 					"columns": [
 							{ data:'from_account_name' ,title:"Form Account"},
-							//{ data:'tag' ,title:"Form Account"},
-
+							{ data:'transaction_type' ,title:"Transaction Type"},
+							{ data:'tags' ,title:"Tags"},
+							{ data:'transaction_date' ,title:"Transaction Date"},
 							{ data:'amount' ,title:"Amount"},
 							
 							
@@ -332,25 +355,48 @@ if ($numOfRow > 0) {
 				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker({
 					format: "mm/dd/yyyy",
 					todayHighlight: true,
-					autoclose: true
+					autoclose: true,
+					startDate: today
 				});
 				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker('setDate', today);
+				$('#datePickerExample1,#datePickerExample2,#datePickerExample3').datepicker('minDate', today);
 			}
 			$('#addtransfer,#addexpense,#addincome').validate();
 			$('#addtransfer,#addexpense,#addincome').on('submit', function(e) {
 				e.preventDefault();
 				// alert($(this).serialize());
+				var form= $(this);
 				if ($(this).valid()) {
 					$.ajax({
 						url: "addexpense.php",
 						method: "POST",
 						data: $(this).serialize(),
-						success: function(response) {}
+						success: function(response) {
+							console.log(form);
+							form[0].reset();
+							$('input[name="tags"]').tagsinput('refresh');
+						}
 					})
 				}
 				return false;
 
 			});
+		});
+
+		$('#account_lists').change(function(){
+				if($(this).val()){  
+					$.ajax({
+						url: "getamount.php",
+						method: "POST",
+						data: {account:$(this).val(),user_id:<?php echo $_SESSION['id'];?>},
+						success: function(response) {
+							$('#ac').show();
+							$('#from_amount').html(response);
+						}
+					});
+				}else{
+					$('#ac').hide();
+				}
 		});
 	</script>
 </body>
