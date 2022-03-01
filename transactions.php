@@ -1,6 +1,6 @@
 <?php
 include 'config/dbcon.php';
-if(!isset($_SESSION['is_loggedin'])){
+if (!isset($_SESSION['is_loggedin'])) {
 	header('location:login.php');
 }
 if (isset($_REQUEST['submit'])) {
@@ -10,7 +10,7 @@ if (isset($_REQUEST['submit'])) {
 	$add_income = $_REQUEST['add_income'];
 }
 
-$sql = "select id,name,type from add_accounts where user_id='".$_SESSION['id']."'";
+$sql = "select id,name,type from add_accounts where user_id='" . $_SESSION['id'] . "'";
 $re = mysqli_query($conn, $sql);
 $numOfRow = mysqli_num_rows($re);
 $accounts_list = [];
@@ -69,7 +69,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-12 text-right"><span id="ac" style="display: none;">Account Income &nbsp; &nbsp;<span id="from_amount"></span></span></div>
 										<div class="col-md-6">
 											<div class="form-group">
-												
+
 												<select class="js-example-basic-single w-100" id="account_lists" name="from_account">
 													<option value="">--Select Account--</option>
 
@@ -86,9 +86,9 @@ if ($numOfRow > 0) {
 											</div>
 										</div>
 										<div class="col-md-6 align-self-end">
-											
+
 											<div class="form-group">
-												
+
 												<div class="btn-group">
 													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
 													<select class="js-example-basic-single w-50" id="currency" name="currency">
@@ -122,7 +122,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-4">
 											<input type="hidden" name="transaction_type" value="EXPENSE">
 											<input type="hidden" name="debit_credit" value="D">
-											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id'];?>">
+											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id']; ?>">
 											<input class="btn btn-primary" type="submit" value="Add Expense" name="add_expense">
 										</div>
 									</div>
@@ -133,8 +133,8 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												
-												<select class="js-example-basic-single w-100"  name="from_account">
+
+												<select class="js-example-basic-single w-100" name="from_account">
 													<option value="">--Select Account--</option>
 													<?php
 													if (!empty($accounts_list)) {
@@ -167,8 +167,8 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												
-												<select class="js-example-basic-single w-100"  name="to_account">
+
+												<select class="js-example-basic-single w-100" name="to_account">
 													<option value="">--To Account--</option>
 													<?php
 													if (!empty($accounts_list)) {
@@ -197,7 +197,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-4">
 											<input type="hidden" name="transaction_type" value="TRANSFER">
 											<input type="hidden" name="debit_credit" value="D">
-											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id'];?>">
+											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id']; ?>">
 											<input class="btn btn-primary" type="submit" value="Add Transfer" name="add_expense">
 										</div>
 									</div>
@@ -208,8 +208,8 @@ if ($numOfRow > 0) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												
-												<select class="js-example-basic-single w-100"  name="from_account">
+
+												<select class="js-example-basic-single w-100" name="from_account">
 													<option value="">--Select Account--</option>
 													<?php
 													if (!empty($accounts_list)) {
@@ -258,7 +258,7 @@ if ($numOfRow > 0) {
 										<div class="col-md-4">
 											<input type="hidden" name="transaction_type" value="INCOME">
 											<input type="hidden" name="debit_credit" value="C">
-											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id'];?>">
+											<input type="hidden" name="user_id" value="<?php echo $_SESSION['id']; ?>">
 											<input class="btn btn-primary" type="submit" value="Add income" name="add_expense">
 										</div>
 									</div>
@@ -272,9 +272,9 @@ if ($numOfRow > 0) {
 						<div class="card">
 							<div class="card-body">
 								<h6 class="card-title">TRANSACTIONS LIST</h6>
-									<table class="table table-bordered" id="transaction_list">
-										
-									</table>
+								<table class="table table-bordered" id="transaction_list">
+
+								</table>
 							</div>
 						</div>
 					</div>
@@ -293,59 +293,85 @@ if ($numOfRow > 0) {
 	<!-- core:js ends -->
 	<script>
 		$.validator.addMethod("lessThan",
-			function (value, element, param) {
-				var otherElement =$('#from_amount').text() ;
+			function(value, element, param) {
+				var otherElement = $('#from_amount').text();
 
-				value=value.replace(/[,₹]/ig,'');
-				otherElement=otherElement.replace(/[,₹]/ig,'');
-					console.log(otherElement);
+				value = value.replace(/[,₹]/ig, '');
+				otherElement = otherElement.replace(/[,₹]/ig, '');
+				console.log(otherElement);
 				return Number(value) <= Number(otherElement);
-			},'Please enter a Amount less than or equal to '+(($('#from_amount').text())?$('#from_amount').text():'0.00'));
-		
+			}, 'Please enter a Amount less than or equal to ' + (($('#from_amount').text()) ? $('#from_amount').text() : '0.00'));
+
 		$("#addexpense").validate({
 			rules: {
-				from_account: {required:true},
-				amount: {required:true,lessThan:true},
-				transaction_date: {required:true},
-								
+				from_account: {
+					required: true
+				},
+				amount: {
+					required: true,
+					lessThan: true
+				},
+				transaction_date: {
+					required: true
+				},
+
 			},
 			messages: {
-				
-				
-			}, 
+
+
+			},
 			errorPlacement: function(error, element) {
 				console.log(element.attr('name'));
 				if (element.attr('name') == 'amount') {
 					error.insertAfter(element.parent());
-				}
-				else {
+				} else {
 					error.insertAfter(element);
 				}
-        	}
+			}
 		});
-
-    $(document).ready(function() {
-
-				$('#transaction_list').DataTable( {
-        			"ajax": {
-						url:'transaction_list.php?',
-						method:"POST",
-						data:{"user_id":<?php echo $_SESSION['id'];?>}
+		const trans=$('#transaction_list').DataTable({
+				"ajax": {
+					url: 'transaction_list.php?',
+					method: "POST",
+					data: {
+						"user_id": <?php echo $_SESSION['id']; ?>
+					}
+				},
+				order: [
+					[1, 'asc']
+				],
+				ordering:false,
+				"columns": [{
+						data: 'from_account_name',
+						title: "Form Account"
 					},
-					order: [[1, 'asc']],
-					"columns": [
-							{ data:'from_account_name' ,title:"Form Account"},
-							{ data:'transaction_type' ,title:"Transaction Type"},
-							{ data:'tags' ,title:"Tags"},
-							{ data:'transaction_date' ,title:"Transaction Date"},
-							{ data:'amount' ,title:"Amount"},
-							
-							
-						]
+					{
+						data: 'transaction_type',
+						title: "Transaction Type"
+					},
+					{
+						data: 'tags',
+						title: "Tags"
+					},
+					{
+						data: 'transaction_date',
+						title: "Transaction Date"
+					},
+					{
+						data: 'amount',
+						title: "Amount"
+					},
+					{
+						data: 'action',
+						title: "Action"
+					},
 
-					
-    			});
-	});
+
+				]
+
+
+			});
+		
 
 		$(function() {
 			'use strict';
@@ -365,7 +391,7 @@ if ($numOfRow > 0) {
 			$('#addtransfer,#addexpense,#addincome').on('submit', function(e) {
 				e.preventDefault();
 				// alert($(this).serialize());
-				var form= $(this);
+				var form = $(this);
 				if ($(this).valid()) {
 					$.ajax({
 						url: "addexpense.php",
@@ -374,7 +400,8 @@ if ($numOfRow > 0) {
 						success: function(response) {
 							console.log(form);
 							form[0].reset();
-							$('input[name="tags"]').tagsinput('refresh');
+							
+							trans.ajax().reload();
 						}
 					})
 				}
@@ -383,21 +410,44 @@ if ($numOfRow > 0) {
 			});
 		});
 
-		$('#account_lists').change(function(){
-				if($(this).val()){  
-					$.ajax({
-						url: "getamount.php",
-						method: "POST",
-						data: {account:$(this).val(),user_id:<?php echo $_SESSION['id'];?>},
-						success: function(response) {
-							$('#ac').show();
-							$('#from_amount').html(response);
-						}
-					});
-				}else{
-					$('#ac').hide();
-				}
+		$('#account_lists').change(function() {
+			if ($(this).val()) {
+				$.ajax({
+					url: "getamount.php",
+					method: "POST",
+					data: {
+						account: $(this).val(),
+						user_id: <?php echo $_SESSION['id']; ?>
+					},
+					success: function(response) {
+						$('#ac').show();
+						$('#from_amount').html(response);
+					}
+				});
+			} else {
+				$('#ac').hide();
+			}
 		});
+
+		function deleterow(id){
+
+				debugger
+			if (id!="" && id!="undefined") {
+				$.ajax({
+					url: "delete_trs.php",
+					method: "POST",
+					data: {
+						trs_id: id,
+						user_id: <?php echo $_SESSION['id']; ?>
+					},
+					success: function(response) {
+						trans.ajax.reload();
+					}
+				});
+
+				}
+				return false;
+		}
 	</script>
 </body>
 

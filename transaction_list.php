@@ -1,9 +1,21 @@
 <?php 
 include 'config/dbcon.php';
 
-$user_id=$_SESSION['id'];
+$user_id=$_REQUEST['user_id'];
 
-$str="SELECT transactions.*,add_accounts.name as from_account_name,to_account.name as to_account_name FROM `transactions` join add_accounts on add_accounts.id=transactions.from_account left join add_accounts to_account on to_account.id=transactions.to_account where transactions.user_id='$user_id' order by transaction_date DESC ";
+$str="SELECT transactions.*,add_accounts.name as from_account_name,to_account.name as to_account_name FROM `transactions` join add_accounts on add_accounts.id=transactions.from_account left join add_accounts to_account on to_account.id=transactions.to_account where transactions.user_id='$user_id' and transaction_date is not null and transaction_date!='0000-00-00' ";
+if(isset($_REQUEST['from_date']) && isset($_REQUEST['end_date']) && !empty($_REQUEST['from_date']) && !empty($_REQUEST['end_date'] )){
+
+  $str.=" and  transactions.transaction_date between '".$_REQUEST['from_date']."' and '".$_REQUEST['end_date']."'";
+}
+if(isset($_REQUEST['tags']) && !empty($_REQUEST['tags'])){
+
+  $str.=" and  transactions.tags like '%".$_REQUEST['tags']."%'";
+}
+
+
+$str.="  order by transaction_date DESC ";
+
 $re=mysqli_query($conn,$str);
 $numOfRow=mysqli_num_rows($re);
 $data=[];
@@ -23,15 +35,12 @@ $data=[];
             }
             $res['transaction_date']=dateformat($res['transaction_date']);
                 
-            $res['tags']=(!empty($res['tags'])?'<div class="badge">'.implode('</div><div class="badge">',explode(',',$res['tags'])).'</div>':'');
+            $res['tags']=(!empty($res['tags'])?'<div class="badge badge-primary">'.implode('</div><div class="badge badge-primary">',explode(',',$res['tags'])).'</div>':'');
+            $res['action']='<button class="btn btn-danger" onclick="deleterow(\''.$res['id'].'\')"><i data-feather="delete" class="feather-18"></i> Delete</button>';
             $data[]=$res;
-
 
          }
 
     }
 echo json_encode(['data'=>$data])
-    
-
-
 ?>

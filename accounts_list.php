@@ -320,6 +320,9 @@ if ($numOfRow > 0) {
     <!-- core:js -->
     <?php include 'layout/script.php' ?>
     <!-- core:js ends -->
+    <?php
+$_SESSION['_flash']=[];
+?>
 </body>
 
 </html>

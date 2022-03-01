@@ -8,6 +8,6 @@ if (isset($_SESSION['_flash']['fail']) || isset($_SESSION['_flash']['success']))
 </div>
 </div>
 <?php
-//$_SESSION['_flash']=[];
+
 }
 ?>
