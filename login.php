@@ -17,6 +17,7 @@ if (isset($_REQUEST['login'])) {
         $_SESSION['id'] = $res['id'];
         $_SESSION['email_id'] = $res['email'];
         $_SESSION['role_name'] = $res['role_name'];
+        $_SESSION['profile_image'] = $res['profile_image'];
         $_SESSION['is_loggedin'] = 1;
         
 

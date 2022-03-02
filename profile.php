@@ -3,6 +3,43 @@ include 'config/dbcon.php';
 if(!isset($_SESSION['is_loggedin'])){
     header('location:login.php');
 }
+
+if(isset($_SESSION['id'])){
+    $sql="select * from users where id='".$_SESSION['id']."'";
+    $re=mysqli_query($conn,$sql);
+    $numOfRow=mysqli_num_rows($re);
+
+    $edit_data = ($numOfRow > 0) ? mysqli_fetch_assoc($re) : [];
+}
+if(isset($_REQUEST['update'])){
+
+        
+    $first_name=$_REQUEST['first_name'];
+    $last_name=$_REQUEST['last_name'];
+    $mobile_no=$_REQUEST['mobile_no'];
+    $email=$_REQUEST['email'];
+    $profile_image='';
+    if(!empty($_FILES['profile_image']['name'])){
+        $profile_image=date('ymdhis')."_".$_FILES['profile_image']['name'];
+        move_uploaded_file($_FILES['profile_image']['tmp_name'],'assets/images/upload/'.$profile_image);
+    }
+   
+
+   
+  
+    $query='';
+    
+        echo $query="update users set first_name='$first_name',last_name='$last_name',email='$email',mobile_no='$mobile_no'".((!empty($profile_image))?", profile_image='$profile_image'":"")." where id='".$_SESSION['id']."'"; 
+   
+    
+    
+    $re=mysqli_query($conn,$query) or die(mysqli_error($conn));
+    if($re){
+        $_SESSION['profile_image']=$profile_image;
+        header("location:profile.php");
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,45 +80,40 @@ if(!isset($_SESSION['is_loggedin'])){
                         <div class="card">
                             <div class="card-body">
                                 <h6 class="card-title">User Profile</h6>
-                                <form class="forms-sample" id="user_profile">
+                                <form class="forms-sample" id="user_profile" method="post" enctype="multipart/form-data">
                                     <div class="form-group row">
                                         <label for="firstname" class="col-sm-3 col-form-label">First Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="firstname" name="first_name" placeholder="First Name" autocomplete="off">
+                                            <input type="text" class="form-control" id="firstname" name="first_name" placeholder="First Name" autocomplete="off" value="<?php echo (isset($edit_data['first_name']) && !empty($edit_data['first_name']))?$edit_data['first_name']:old('first_name'); ?>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="lastname" class="col-sm-3 col-form-label">Last Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="lastname" name="last_name" placeholder="Last Name">
+                                            <input type="text" class="form-control" id="lastname" name="last_name" placeholder="Last Name" value="<?php echo (isset($edit_data['last_name']) && !empty($edit_data['last_name']))?$edit_data['last_name']:old('last_name'); ?>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="email" class="col-sm-3 col-form-label">Email</label>
                                         <div class="col-sm-9">
-                                            <input type="email" class="form-control" id="email" name="email" autocomplete="off" placeholder="Email">
+                                            <input type="email" class="form-control" id="email" name="email" autocomplete="off" placeholder="Email" value="<?php echo (isset($edit_data['email']) && !empty($edit_data['email']))?$edit_data['email']:old('email'); ?>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="mobile_number" class="col-sm-3 col-form-label">Mobile</label>
                                         <div class="col-sm-9">
-                                            <input type="tel" class="form-control" id="mobile_number" name="mobile_no" placeholder="Mobile number">
+                                        
+                                            <input type="text" data-inputmask="'mask': '9999999999'"  class="form-control" id="mobile_number" name="mobile_no" placeholder="Mobile number" value="<?php echo (isset($edit_data['mobile_no']) && !empty($edit_data['mobile_no']))?$edit_data['mobile_no']:old('mobile_no'); ?>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Password</label>
+                                    <label for="profile_img" class="col-sm-3 col-form-label">Profile Image</label>
                                         <div class="col-sm-9">
-                                            <input type="password" class="form-control" id="exampleInputPassword2" name= "password" autocomplete="off" placeholder="Password">
+										<input class="form-control" type="file" id="formFile" value="profile_image" name="profile_image" accept=".jpg,.png,.jpeg">
                                         </div>
-                                    </div>
-                                    <div class="form-check form-check-flat form-check-primary mt-0">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" class="form-check-input">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                    <button class="btn btn-light">Cancel</button>
+									</div>
+                                    <button type="submit" class="btn btn-primary mr-2" name="update">Update</button>
+                                    <button class="btn btn-light" name="cancel">Cancel</button>
                                 </form>
                             </div>
                         </div>
@@ -98,6 +130,7 @@ if(!isset($_SESSION['is_loggedin'])){
 
     <!-- core:js -->
     <?php include 'layout/script.php' ?>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <!-- core:js ends -->
 
     <!-- jquery form validation starts -->
@@ -120,24 +153,20 @@ if(!isset($_SESSION['is_loggedin'])){
 					email: true,
                     regex:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 				},
-				password: {
-					required: true,
-					minlength: 5
-				},
 				mobile_no: {
 					required: true,
-                    regex:/^[0-9]{10,10}$/	
-				},				
+                    minlength:10,
+                    maxlength:10,
+                    
+                    //regex:/^((\+){1}91){1}[1-9]{1}[0-9]{9}$/	
+				},
+                profile_image: {
+                    accept: "image/*"
+                },				
 			},
 			messages: {
 				fname: {required:"Please enter your firstname"},
-				lname: {required:"Please enter your lastname"},
-				
-				password: {
-					required: "Please provide a password",
-					minlength: "Your password must be at least 5 characters long"
-				},
-				
+				lname: {required:"Please enter your lastname"},				
 				email: {
                     email:"Please enter a valid email address",
                     regex:"please enter valid email address",
@@ -146,10 +175,12 @@ if(!isset($_SESSION['is_loggedin'])){
                     regex:"Please enter a valid mobile no."
                 },
 				
+				
 			}
 		});
 
-        })
+    });
+
         		
     </script>
 
