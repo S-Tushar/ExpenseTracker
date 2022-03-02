@@ -54,7 +54,7 @@ if ($numOfRow > 0) {
 							<li class="nav-item">
 								<a class="nav-link active" id="expense-tab" data-bs-toggle="tab" href="#expense" role="tab" aria-controls="expense" aria-selected="true">Expense</a>
 							</li>
-							<li class="nav-item">
+							<li class="nav-item d-none">
 								<a class="nav-link" id="transfer-tab" data-bs-toggle="tab" href="#transfer" role="tab" aria-controls="transfer" aria-selected="false">Transfer</a>
 							</li>
 							<li class="nav-item">
@@ -67,10 +67,10 @@ if ($numOfRow > 0) {
 								<form method="post" id="addexpense">
 									<div class="row">
 										<div class="col-md-12 text-right"><span id="ac" style="display: none;">Account Income &nbsp; &nbsp;<span id="from_amount"></span></span></div>
-										<div class="col-md-6">
+										<div class="col-md-6 d-none">
 											<div class="form-group">
 
-												<select class="js-example-basic-single w-100" id="account_lists" name="from_account">
+												<select class="js-example-basic-single w-100 d-none" id="account_lists" name="from_account">
 													<option value="">--Select Account--</option>
 
 													<?php
@@ -88,10 +88,10 @@ if ($numOfRow > 0) {
 										<div class="col-md-6 align-self-end">
 
 											<div class="form-group">
-
+													
 												<div class="btn-group">
-													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
-													<select class="js-example-basic-single w-50" id="currency" name="currency">
+													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" placeholder="Amount"/>
+													<select class="js-example-basic-single w-50 d-none" id="currency" name="currency">
 														<option value="USD">USD</option>
 														<option value="AED">AED</option>
 														<option value="GBP">GBP</option>
@@ -206,7 +206,7 @@ if ($numOfRow > 0) {
 							<div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
 								<form action="" method="" id="addincome">
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-6 d-none">
 											<div class="form-group">
 
 												<select class="js-example-basic-single w-100" name="from_account">
@@ -226,8 +226,8 @@ if ($numOfRow > 0) {
 										<div class="col-md-6 align-self-end">
 											<div class="form-group">
 												<div class="btn-group">
-													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" />
-													<select class="js-example-basic-single w-50" id="currency" name="currency">
+													<input class="form-control mb-4 mb-md-0" data-inputmask="'alias': 'currency'" name="amount" placeholder="Amount" />
+													<select class="js-example-basic-single w-50 d-none" id="currency" name="currency">
 														<option value="USD">USD</option>
 														<option value="AED">AED</option>
 														<option value="GBP">GBP</option>
@@ -298,9 +298,9 @@ if ($numOfRow > 0) {
 
 				value = value.replace(/[,₹]/ig, '');
 				otherElement = otherElement.replace(/[,₹]/ig, '');
-				console.log(otherElement);
+				
 				return Number(value) <= Number(otherElement);
-			}, 'Please enter a Amount less than or equal to ' + (($('#from_amount').text()) ? $('#from_amount').text() : '0.00'));
+			}, 'Please enter a Amount less than or equal to ' +( $('#from_amount').html()));
 
 		$("#addexpense").validate({
 			rules: {
@@ -341,10 +341,11 @@ if ($numOfRow > 0) {
 					[1, 'asc']
 				],
 				ordering:false,
-				"columns": [{
+				"columns": [
+					/*{
 						data: 'from_account_name',
 						title: "Form Account"
-					},
+					},*/
 					{
 						data: 'transaction_type',
 						title: "Transaction Type"
@@ -410,8 +411,8 @@ if ($numOfRow > 0) {
 			});
 		});
 
-		$('#account_lists').change(function() {
-			if ($(this).val()) {
+		$(document).ready(function() {
+			
 				$.ajax({
 					url: "getamount.php",
 					method: "POST",
@@ -424,10 +425,7 @@ if ($numOfRow > 0) {
 						$('#from_amount').html(response);
 					}
 				});
-			} else {
-				$('#from_amount').html('');
-				$('#ac').hide();
-			}
+			
 		});
 
 		function deleterow(id){

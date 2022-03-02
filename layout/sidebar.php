@@ -27,7 +27,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="accounts_list.php" class="nav-link">
+            <a href="accounts_list.php" class="nav-link d-none">
               <i class="link-icon" data-feather="credit-card"></i>
               <span class="link-title">Accounts</span>
             </a>

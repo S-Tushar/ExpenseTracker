@@ -64,7 +64,7 @@ function getrow($type, $user_id, $conn)
             <div class="page-content">
                 <div class="card">
                     <div class="card-body">
-                        <h6 class="card-title">TRANSACTIONS LIST</h6>
+                        <h6 class="card-title">Expense</h6>
                         <div class="row mb-5">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -98,10 +98,52 @@ function getrow($type, $user_id, $conn)
                             </div>
                         </div>
                         <table class="table table-bordered" id="transaction_list">
-
+                                                     
                         </table>
                     </div>
                 </div>
+
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h6 class="card-title">Income</h6>
+                        <div class="row mb-5">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="daterange" value="" />
+                                    <input type="hidden" id="from_date2" name="from_date" />
+                                    <input type="hidden" id="end_date2" name="end_date" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <?php
+                                $sql2 = "SELECT * from tags ";
+
+                                $re2 = mysqli_query($conn, $sql2);
+                                $numOfRow2 = mysqli_num_rows($re2);
+                                ?>
+                                <div class="form-group">
+                                    <select class="form-control" id="tags3" onchange="callajax()">
+                                        <option value="">Select Tags </option>
+                                        <?php
+                                        if ($numOfRow2 > 0) {
+                                            while ($r = mysqli_fetch_assoc($re2)) {
+                                        ?>
+                                                <option value="<?php echo $r['tags'] ?>"><?php echo $r['tags'] ?></option>
+                                        <?php
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered" id="transaction_list_credit">
+                                       
+                        </table>
+                    </div>
+                </div>
+
                 <div class="card mt-5 d-none">
                     <div class="card-body">
                         <h6 class="card-title">Net Worth</h6>
@@ -177,25 +219,28 @@ function getrow($type, $user_id, $conn)
     <!-- core:js ends -->
     <script>
         var ts;
+       
         var ts = $('#transaction_list').DataTable({
                 "ajax": {
                     url: 'transaction_list.php',
                     method: "POST",
                     data: function(d) {
                         d.user_id = <?php echo $_SESSION['id']; ?>;
-                        d.from_date = $('#from_date').val();
-                        d.end_date = $('#end_date').val();
+                        d.from_date = $('#from_date2').val();
+                        d.end_date = $('#end_date2').val();
                         d.tags = $('#tags2').val();
+                        d.type = 'D';
                     },
                 },
                 ordering: false,
                 order: [
                     [1, 'asc']
                 ],
-                "columns": [{
+                "columns": [
+                    /*{
                         data: 'from_account_name',
                         title: "Form Account"
-                    },
+                    },*/
                     {
                         data: 'transaction_type',
                         title: "Transaction Type"
@@ -214,9 +259,62 @@ function getrow($type, $user_id, $conn)
                     },
 
 
-                ]
+                ],
+               
             });
-        $(document).ready(function() {
+
+
+            
+            var ts2 = $('#transaction_list_credit').DataTable({
+                "ajax": {
+                    url: 'transaction_list.php',
+                    method: "POST",
+                    data: function(d) {
+                        d.user_id = <?php echo $_SESSION['id']; ?>;
+                        d.from_date = $('#from_date').val();
+                        d.end_date = $('#end_date').val();
+                        d.tags = $('#tags3').val();
+                        d.type = 'C';
+                    },
+                },
+                ordering: false,
+                order: [
+                    [1, 'asc']
+                ],
+                "columns": [
+                    /*{
+                        data: 'from_account_name',
+                        title: "Form Account"
+                    },*/
+                    {
+                        data: 'transaction_type',
+                        title: "Transaction Type"
+                    },
+                    {
+                        data: 'tags',
+                        title: "Tags"
+                    },
+                    {
+                        data: 'transaction_date',
+                        title: "Transaction Date"
+                    },
+                    {
+                        data: 'amount',
+                        title: "Amount"
+                    },
+                    {
+                        data: 'amount',
+                        title: "Amount",
+                        visible:false,
+                    },
+
+
+                ],
+              
+            });
+       
+       
+            $(document).ready(function() {
 
            
 
@@ -236,6 +334,7 @@ function getrow($type, $user_id, $conn)
         function callajax() {
 
             ts.ajax.reload();
+            ts2.ajax.reload();
 
         }
     </script>
