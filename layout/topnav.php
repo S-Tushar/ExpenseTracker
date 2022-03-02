@@ -73,13 +73,39 @@
 			<li class="nav-item dropdown nav-profile">
 				<a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<span class="m-2">Hi, <?php echo  $_SESSION['name'] ?></span>
-					<img src="https://via.placeholder.com/30x30" alt="profile">
+					<?php
+						if(!empty($_SESSION['profile_image'])){
+							?>
+							<img src="assets/images/upload/<?php  echo $_SESSION['profile_image']; ?>" alt="">
+							<?php
+					}
+					else{
+						?>
+							<img src="https://via.placeholder.com/80x80" alt="">
+						<?php
+					}
+					?>
 				</a>
 				<div class="dropdown-menu" aria-labelledby="profileDropdown">
 					<div class="dropdown-header d-flex flex-column align-items-center">
 						
 						<div class="figure mb-3">
-							<img src="https://via.placeholder.com/80x80" alt="">
+							
+							<?php 
+							
+									if(!empty($_SESSION['profile_image'])){
+											?>
+											<img src="assets/images/upload/<?php  echo $_SESSION['profile_image']; ?>" alt="">
+											<?php
+									}
+									else{
+										?>
+											<img src="https://via.placeholder.com/80x80" alt="">
+										<?php
+									}
+							
+							?>
+							
 						</div>
 						<div class="info text-center">
 							<p class="name font-weight-bold mb-0"><?php echo  $_SESSION['name'] ?></p>
@@ -89,8 +115,8 @@
 					<div class="dropdown-body">
 						<ul class="profile-nav p-0 pt-3">
 						
-							<li class="nav-item d-none">
-								<a href="javascript:;" class="nav-link">
+							<li class="nav-item">
+								<a href="profile.php" class="nav-link">
 									<i data-feather="edit"></i>
 									<span>Edit Profile</span>
 								</a>
