@@ -21,6 +21,12 @@ if(isset($_REQUEST['type']) && !empty($_REQUEST['type'])){
   $str.=" and  transactions.debit_credit='".$_REQUEST['type']."'";
   $s.=" and  transactions.debit_credit='".$_REQUEST['type']."'";
 }
+if(isset($_REQUEST['transaction_type']) && !empty($_REQUEST['transaction_type'])){
+
+  $str.=" and  transactions.transaction_type='".$_REQUEST['transaction_type']."'";
+  $s.=" and  transactions.transaction_type='".$_REQUEST['transaction_type']."'";
+}
+
 
 
 $str.="  order by transaction_date DESC ";

@@ -52,27 +52,47 @@ if ($numOfRow > 0) {
                             <div class="card-body">
                                 <h6 class="card-title">TRANSACTIONS LIST</h6>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="dropdown">
-                                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Transaction Types
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#">Income</a>
-                                                    <a class="dropdown-item" href="#">Expense</a>
-                                                    <a class="dropdown-item" href="#">Transfer</a>
-                                                </div>
-                                            </div>
+                                    
+                                        <div class="form-group col-md-3">
+                                           
+
+                                            <select name="transaction_type" class="form-control" id="transaction_type">
+                                                <option value="">--Transaction Type--</option>
+                                                <option value="INCOME">Income</option>
+                                                <option value="EXPENSE">Expense</option>
+                                                
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="form-group col-md-4">
                                             <input type="text" class="form-control" name="daterange" value="" />
-                                            <input type="hidden" id="from_date2" name="from_date" />
-                                            <input type="hidden" id="end_date2" name="end_date" />
+                                            <input type="hidden" id="from_date" name="from_date" />
+                                            <input type="hidden" id="end_date" name="end_date" />
                                         </div>
-                                    </div>
+                                        <div class="col-md-4">
+                                <?php
+                                $sql2 = "SELECT * from tags ";
+
+                                $re2 = mysqli_query($conn, $sql2);
+                                $numOfRow2 = mysqli_num_rows($re2);
+                                ?>
+                                <div class="form-group">
+                                    <select class="form-control" id="tags2" onchange="callajax()">
+                                        <option value="">Select Tags </option>
+                                        <?php
+                                        if ($numOfRow2 > 0) {
+                                            while ($r = mysqli_fetch_assoc($re2)) {
+                                        ?>
+                                                <option value="<?php echo $r['tags'] ?>"><?php echo $r['tags'] ?></option>
+                                        <?php
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+
+                                </div>
+                            </div>
+                                    
+                                   
                                 </div>
 
                                 <table class="table table-bordered" id="transaction_list">
@@ -104,6 +124,7 @@ if ($numOfRow > 0) {
                 opens: 'right',
                 "startDate": moment().startOf('month'),
                 "endDate": moment().endOf('month'),
+                maxDate: new Date()
             }, function(start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                 $('#from_date').val(start.format('YYYY-MM-DD'));
@@ -151,11 +172,22 @@ if ($numOfRow > 0) {
             }
         });
         const trans = $('#transaction_list').DataTable({
+            dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'print'
+                ],
             "ajax": {
                 url: 'transaction_list.php?',
+                
+               
                 method: "POST",
-                data: {
-                    "user_id": <?php echo $_SESSION['id']; ?>
+                data: function(d) {
+                    d.user_id = <?php echo $_SESSION['id']; ?>;
+                    d.from_date = $('#from_date').val();
+                    d.end_date = $('#end_date').val();
+                    d.transaction_type= $('#transaction_type').val();
+                    d.tags = $('#tags2').val();
+                   
                 }
             },
             order: [
@@ -183,13 +215,19 @@ if ($numOfRow > 0) {
                     data: 'amount',
                     title: "Amount"
                 },
-                {
-                    data: 'action',
-                    title: "Action"
-                },
+                
 
 
-            ]
+            ],
+           
+                "drawCallback": function( settings ) {
+                    var api = this.api();
+                   console.log(api.data());
+                    if($('#transaction_list tfoot').length==0){
+                    //$('#transaction_list').append('<tfoot><tr><td colspan="3"><Total/td><td></td></tr></tfoot>');
+                    }
+                }
+            
 
 
         });
@@ -267,6 +305,12 @@ if ($numOfRow > 0) {
 
             }
             return false;
+        }
+        $('#transaction_type').on('change',function(){
+            trans.ajax.reload();
+        });
+        function callajax(){
+            trans.ajax.reload();
         }
     </script>
 </body>

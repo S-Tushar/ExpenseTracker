@@ -27,6 +27,13 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="reports.php" class="nav-link">
+            <i class="link-icon" data-feather="repeat"></i>
+              
+              <span class="link-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="accounts_list.php" class="nav-link d-none">
               <i class="link-icon" data-feather="credit-card"></i>
               <span class="link-title">Accounts</span>
