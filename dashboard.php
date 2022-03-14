@@ -1,8 +1,21 @@
 <?php
 include 'config/dbcon.php';
+
 if (!isset($_SESSION['is_loggedin'])) {
     header('location:login.php');
 }
+//$sql = "select sum(amount) as total from transactions where user_id='".$_REQUEST['user_id']."' and transaction_type='INCOME' and from_account='".$_REQUEST['account']."'";
+$sql = "select sum(amount) as total from transactions where user_id='" . $_SESSION['id'] . "' and transaction_type='INCOME'";
+$re = mysqli_query($conn, $sql);
+$numOfRow = mysqli_num_rows($re);
+$income = mysqli_fetch_assoc($re)['total'];
+
+//$sql = "select sum(amount) as total from transactions where user_id='".$_REQUEST['user_id']."' and transaction_type!='INCOME' and from_account='".$_REQUEST['account']."'";
+$sql = "select sum(amount) as total from transactions where transaction_type!='INCOME' and user_id='" . $_SESSION['id'] . "'";
+$re = mysqli_query($conn, $sql);
+$numOfRow = mysqli_num_rows($re);
+$expense = mysqli_fetch_assoc($re)['total'];
+
 
 $sql = "SELECT add_accounts.type,add_accounts.name,sum(amount) as total FROM `transactions` join add_accounts on add_accounts.id=transactions.from_account WHERE transactions.user_id='" . $_SESSION['id'] . "' GROUP BY add_accounts.type";
 $re = mysqli_query($conn, $sql);
@@ -36,7 +49,21 @@ function getrow($type, $user_id, $conn)
     }
     return $data;
 }
+
+// Query for graph table
+$sql2 = 'SELECT sum(IFNULL((select sum(IFNULL(amount,0)) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type="INCOME"),0)) as income,sum(IFNULL((select sum(amount) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type in ("EXPENSE","TRANSFER")),0)) as expense, tr.transaction_type, ifnull(tr.transaction_date,"0000-00-00") as "Transaction Date", date_format(tr.transaction_date,"%M") as "Transaction Month", year(tr.transaction_date) as "Transaction Year" FROM transactions tr WHERE tr.transaction_date IS NOT null and year(tr.transaction_date)= Year(CURRENT_DATE) GROUP by Month(tr.transaction_date);';
+$result = mysqli_query($conn, $sql2);
+$numOfRow = mysqli_num_rows($result);
+$graphData=[];
+ if($numOfRow > 0){
+     while($graph = mysqli_fetch_assoc($result)){
+         $graphData[]=['month'=>$graph['Transaction Month'],'income'=>$graph['income'],'expense'=>$graph['expense']];
+     }
+ }
+ 
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -62,6 +89,11 @@ function getrow($type, $user_id, $conn)
             <!-- partial -->
 
             <div class="page-content">
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <div id="barchart_material" style="width: 900px; height: 500px;"></div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Expense</h6>
@@ -98,7 +130,7 @@ function getrow($type, $user_id, $conn)
                             </div>
                         </div>
                         <table class="table table-bordered" id="transaction_list">
-                                                     
+
                         </table>
                     </div>
                 </div>
@@ -139,7 +171,7 @@ function getrow($type, $user_id, $conn)
                             </div>
                         </div>
                         <table class="table table-bordered" id="transaction_list_credit">
-                                       
+
                         </table>
                     </div>
                 </div>
@@ -219,106 +251,106 @@ function getrow($type, $user_id, $conn)
     <!-- core:js ends -->
     <script>
         var ts;
-       
+
         var ts = $('#transaction_list').DataTable({
-                "ajax": {
-                    url: 'transaction_list.php',
-                    method: "POST",
-                    data: function(d) {
-                        d.user_id = <?php echo $_SESSION['id']; ?>;
-                        d.from_date = $('#from_date2').val();
-                        d.end_date = $('#end_date2').val();
-                        d.tags = $('#tags2').val();
-                        d.type = 'D';
-                    },
+            "ajax": {
+                url: 'transaction_list.php',
+                method: "POST",
+                data: function(d) {
+                    d.user_id = <?php echo $_SESSION['id']; ?>;
+                    d.from_date = $('#from_date2').val();
+                    d.end_date = $('#end_date2').val();
+                    d.tags = $('#tags2').val();
+                    d.type = 'D';
                 },
-                ordering: false,
-                order: [
-                    [1, 'asc']
-                ],
-                "columns": [
-                    /*{
-                        data: 'from_account_name',
-                        title: "Form Account"
-                    },*/
-                    {
-                        data: 'transaction_type',
-                        title: "Transaction Type"
-                    },
-                    {
-                        data: 'tags',
-                        title: "Tags"
-                    },
-                    {
-                        data: 'transaction_date',
-                        title: "Transaction Date"
-                    },
-                    {
-                        data: 'amount',
-                        title: "Amount"
-                    },
-
-
-                ],
-               
-            });
-
-
-            
-            var ts2 = $('#transaction_list_credit').DataTable({
-                "ajax": {
-                    url: 'transaction_list.php',
-                    method: "POST",
-                    data: function(d) {
-                        d.user_id = <?php echo $_SESSION['id']; ?>;
-                        d.from_date = $('#from_date').val();
-                        d.end_date = $('#end_date').val();
-                        d.tags = $('#tags3').val();
-                        d.type = 'C';
-                    },
+            },
+            ordering: false,
+            order: [
+                [1, 'asc']
+            ],
+            "columns": [
+                /*{
+                    data: 'from_account_name',
+                    title: "Form Account"
+                },*/
+                {
+                    data: 'transaction_type',
+                    title: "Transaction Type"
                 },
-                ordering: false,
-                order: [
-                    [1, 'asc']
-                ],
-                "columns": [
-                    /*{
-                        data: 'from_account_name',
-                        title: "Form Account"
-                    },*/
-                    {
-                        data: 'transaction_type',
-                        title: "Transaction Type"
-                    },
-                    {
-                        data: 'tags',
-                        title: "Tags"
-                    },
-                    {
-                        data: 'transaction_date',
-                        title: "Transaction Date"
-                    },
-                    {
-                        data: 'amount',
-                        title: "Amount"
-                    },
-                    {
-                        data: 'amount',
-                        title: "Amount",
-                        visible:false,
-                    },
+                {
+                    data: 'tags',
+                    title: "Tags"
+                },
+                {
+                    data: 'transaction_date',
+                    title: "Transaction Date"
+                },
+                {
+                    data: 'amount',
+                    title: "Amount"
+                },
 
 
-                ],
-              
-            });
-       
-       
-            $(document).ready(function() {
+            ],
 
-           
+        });
 
-           
+
+
+        var ts2 = $('#transaction_list_credit').DataTable({
+            "ajax": {
+                url: 'transaction_list.php',
+                method: "POST",
+                data: function(d) {
+                    d.user_id = <?php echo $_SESSION['id']; ?>;
+                    d.from_date = $('#from_date').val();
+                    d.end_date = $('#end_date').val();
+                    d.tags = $('#tags3').val();
+                    d.type = 'C';
+                },
+            },
+            ordering: false,
+            order: [
+                [1, 'asc']
+            ],
+            "columns": [
+                /*{
+                    data: 'from_account_name',
+                    title: "Form Account"
+                },*/
+                {
+                    data: 'transaction_type',
+                    title: "Transaction Type"
+                },
+                {
+                    data: 'tags',
+                    title: "Tags"
+                },
+                {
+                    data: 'transaction_date',
+                    title: "Transaction Date"
+                },
+                {
+                    data: 'amount',
+                    title: "Amount"
+                },
+                {
+                    data: 'amount',
+                    title: "Amount",
+                    visible: false,
+                },
+
+
+            ],
+
+        });
+
+
+        $(document).ready(function() {
+
+
+
+
             $('input[name="daterange"]').daterangepicker({
                 opens: 'right',
                 "startDate": moment().startOf('month'),
@@ -331,11 +363,48 @@ function getrow($type, $user_id, $conn)
             });
 
         });
+
         function callajax() {
 
             ts.ajax.reload();
             ts2.ajax.reload();
 
+        }
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['bar']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Month', 'Income', 'Expenses'],
+                <?php 
+                    foreach($graphData as $d1){
+                        
+                        echo "['".$d1['month']."','".$d1['income']."','".$d1['expense']."'],";
+                    }
+                ?>
+                // ['2014', 1000, 400],
+                // ['2015', 1170, 460],
+                // ['2016', 660, 1120],
+                // ['2017', 1030, 540]
+            ]);
+
+            var options = {
+                chart: {
+                    title: 'Net Worth',
+                    subtitle: 'Income and Expenses: Month',
+                },
+                bars: 'vertical' // Required for Material Bar Charts.
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
         }
     </script>
 </body>
