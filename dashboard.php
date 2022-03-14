@@ -4,7 +4,6 @@ include 'config/dbcon.php';
 if (!isset($_SESSION['is_loggedin'])) {
     header('location:login.php');
 }
-
 //$sql = "select sum(amount) as total from transactions where user_id='".$_REQUEST['user_id']."' and transaction_type='INCOME' and from_account='".$_REQUEST['account']."'";
 $sql = "select sum(amount) as total from transactions where user_id='" . $_SESSION['id'] . "' and transaction_type='INCOME'";
 $re = mysqli_query($conn, $sql);
@@ -50,6 +49,19 @@ function getrow($type, $user_id, $conn)
     }
     return $data;
 }
+
+// Query for graph table
+$sql2 = 'SELECT sum(IFNULL((select sum(IFNULL(amount,0)) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type="INCOME"),0)) as income,sum(IFNULL((select sum(amount) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type in ("EXPENSE","TRANSFER")),0)) as expense, tr.transaction_type, ifnull(tr.transaction_date,"0000-00-00") as "Transaction Date", date_format(tr.transaction_date,"%M") as "Transaction Month", year(tr.transaction_date) as "Transaction Year" FROM transactions tr WHERE tr.transaction_date IS NOT null and year(tr.transaction_date)= Year(CURRENT_DATE) GROUP by Month(tr.transaction_date);';
+$result = mysqli_query($conn, $sql2);
+$numOfRow = mysqli_num_rows($result);
+$graphData=[];
+ if($numOfRow > 0){
+     while($graph = mysqli_fetch_assoc($result)){
+         $graphData[]=['month'=>$graph['Transaction Month'],'income'=>$graph['income'],'expense'=>$graph['expense']];
+     }
+ }
+ 
+
 ?>
 
 <!DOCTYPE html>
@@ -369,11 +381,17 @@ function getrow($type, $user_id, $conn)
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Date', 'Income', 'Expenses'],
-                ['2014', 1000, 400],
-                ['2015', 1170, 460],
-                ['2016', 660, 1120],
-                ['2017', 1030, 540]
+                ['Month', 'Income', 'Expenses'],
+                <?php 
+                    foreach($graphData as $d1){
+                        
+                        echo "['".$d1['month']."','".$d1['income']."','".$d1['expense']."'],";
+                    }
+                ?>
+                // ['2014', 1000, 400],
+                // ['2015', 1170, 460],
+                // ['2016', 660, 1120],
+                // ['2017', 1030, 540]
             ]);
 
             var options = {
@@ -391,4 +409,4 @@ function getrow($type, $user_id, $conn)
     </script>
 </body>
 
-</html> 
+</html>
