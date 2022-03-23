@@ -5,17 +5,29 @@ if (!isset($_SESSION['is_loggedin'])) {
     header('location:login.php');
 }
 //$sql = "select sum(amount) as total from transactions where user_id='".$_REQUEST['user_id']."' and transaction_type='INCOME' and from_account='".$_REQUEST['account']."'";
-$sql = "select sum(amount) as total from transactions where user_id='" . $_SESSION['id'] . "' and transaction_type='INCOME'";
+$sql = "select IFNULL(sum(amount),0) as total from transactions where user_id='" . $_SESSION['id'] . "' and transaction_type='INCOME'";
 $re = mysqli_query($conn, $sql);
 $numOfRow = mysqli_num_rows($re);
 $income = mysqli_fetch_assoc($re)['total'];
 
+
 //$sql = "select sum(amount) as total from transactions where user_id='".$_REQUEST['user_id']."' and transaction_type!='INCOME' and from_account='".$_REQUEST['account']."'";
-$sql = "select sum(amount) as total from transactions where transaction_type!='INCOME' and user_id='" . $_SESSION['id'] . "'";
+$sql = "select IFNULL(sum(amount),0) as total from transactions where transaction_type!='INCOME' and user_id='" . $_SESSION['id'] . "'";
 $re = mysqli_query($conn, $sql);
 $numOfRow = mysqli_num_rows($re);
 $expense = mysqli_fetch_assoc($re)['total'];
 
+// Query for monthly income
+$sql = "select IFNULL(sum(amount),0) as total from transactions where user_id='" . $_SESSION['id'] . "' and transaction_type='INCOME' and month(transaction_date)=month(now())";
+$re = mysqli_query($conn, $sql);
+$numOfRow = mysqli_num_rows($re);
+$monthly_income = mysqli_fetch_assoc($re)['total'];
+
+// query for monthly expense
+$sql = "select IFNULL(sum(amount),0) as total from transactions where transaction_type!='INCOME' and month(transaction_date)=month(now()) and user_id='" . $_SESSION['id'] . "'";
+$re = mysqli_query($conn, $sql);
+$numOfRow = mysqli_num_rows($re);
+$monthly_expense = mysqli_fetch_assoc($re)['total'];
 
 $sql = "SELECT add_accounts.type,add_accounts.name,sum(amount) as total FROM `transactions` join add_accounts on add_accounts.id=transactions.from_account WHERE transactions.user_id='" . $_SESSION['id'] . "' GROUP BY add_accounts.type";
 $re = mysqli_query($conn, $sql);
@@ -51,16 +63,17 @@ function getrow($type, $user_id, $conn)
 }
 
 // Query for graph table
-$sql2 = 'SELECT sum(IFNULL((select sum(IFNULL(amount,0)) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type="INCOME"),0)) as income,sum(IFNULL((select sum(amount) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type in ("EXPENSE","TRANSFER")),0)) as expense, tr.transaction_type, ifnull(tr.transaction_date,"0000-00-00") as "Transaction Date", date_format(tr.transaction_date,"%M") as "Transaction Month", year(tr.transaction_date) as "Transaction Year" FROM transactions tr WHERE tr.transaction_date IS NOT null and year(tr.transaction_date)= Year(CURRENT_DATE) GROUP by Month(tr.transaction_date);';
+$sql2 = 'SELECT sum(IFNULL((select sum(IFNULL(amount,0)) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type="INCOME"),0)) as income,sum(IFNULL((select sum(amount) from transactions i where i.transaction_date=tr.transaction_date and i.transaction_type in ("EXPENSE","TRANSFER")),0)) as expense, tr.transaction_type, ifnull(tr.transaction_date,"0000-00-00") as "Transaction Date", date_format(tr.transaction_date,"%M") as "Transaction Month", year(tr.transaction_date) as "Transaction Year" FROM transactions tr WHERE tr.transaction_date IS NOT null and year(tr.transaction_date)= Year(CURRENT_DATE) and user_id=\''.$_SESSION['id'].'\'  GROUP by Month(tr.transaction_date);';
+
 $result = mysqli_query($conn, $sql2);
 $numOfRow = mysqli_num_rows($result);
-$graphData=[];
- if($numOfRow > 0){
-     while($graph = mysqli_fetch_assoc($result)){
-         $graphData[]=['month'=>$graph['Transaction Month'],'income'=>$graph['income'],'expense'=>$graph['expense']];
-     }
- }
- 
+$graphData = [];
+
+if ($numOfRow > 0) {
+    while ($graph = mysqli_fetch_assoc($result)) {
+        $graphData[] = ['month' => $graph['Transaction Month'], 'income' => $graph['income'], 'expense' => $graph['expense']];
+    }
+}
 
 ?>
 
@@ -89,9 +102,64 @@ $graphData=[];
             <!-- partial -->
 
             <div class="page-content">
-                <div class="card mb-5">
-                    <div class="card-body">
-                        <div id="barchart_material" style="width: 900px; height: 500px;"></div>
+                <div class="mb-5">
+                    <div class="row p-3">
+                        <div class="card col-md-6">
+                            <div class="card-body" id="barchart_material" style="width: 450px; height: 350px;"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-baseline">
+                                        <h6 class="card-title mb-3">Total Income</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 col-md-12 col-xl-5">
+                                            <h3><i class="fa-solid fa-indian-rupee-sign"></i> <?php echo $income; ?></h3>
+                                            <!-- <div class="d-flex align-items-baseline">
+                                                <p class="text-success">
+                                                    <span>+3.3%</span>
+                                                    <i data-feather="arrow-up" class="icon-sm mb-1"></i>
+                                                </p>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-baseline">
+                                        <h6 class="card-title mb-3">Total Expense</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 col-md-12 col-xl-5">
+                                            <h3><i class="fa-solid fa-indian-rupee-sign"></i> <?php echo $expense; ?></h3>
+                                            <!-- <div class="d-flex align-items-baseline">
+                                                <p class="text-success">
+                                                    <span>+3.3%</span>
+                                                    <i data-feather="arrow-up" class="icon-sm mb-1"></i>
+                                                </p>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-baseline">
+                                        <h6 class="card-title mb-3">Current Month</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        <h4 class="mb-2">Income : <i class="fa-solid fa-indian-rupee-sign"></i> <?php echo $monthly_income; ?></h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h4 class="mb-2">Expense : <i class="fa-solid fa-indian-rupee-sign"></i> <?php echo $monthly_expense; ?></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -382,11 +450,11 @@ $graphData=[];
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
                 ['Month', 'Income', 'Expenses'],
-                <?php 
-                    foreach($graphData as $d1){
-                        
-                        echo "['".$d1['month']."','".$d1['income']."','".$d1['expense']."'],";
-                    }
+                <?php
+                foreach ($graphData as $d1) {
+
+                    echo "['" . $d1['month'] . "','" . $d1['income'] . "','" . $d1['expense'] . "'],";
+                }
                 ?>
                 // ['2014', 1000, 400],
                 // ['2015', 1170, 460],

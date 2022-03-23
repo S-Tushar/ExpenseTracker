@@ -10,9 +10,9 @@
           <span></span>
         </div>
       </div>
-      <div class="sidebar-body">
+      <div class="sidebar-body" style="background: #FFF url(assets/images/3353181.jpg); background-repeat: no-repeat;background-size: contain ;
+    background-position: center ;">
         <ul class="nav">
-          
           <li class="nav-item">
             <a href="dashboard.php" class="nav-link">
               <i class="link-icon" data-feather="home"></i>
@@ -21,15 +21,13 @@
           </li>
           <li class="nav-item">
             <a href="transactions.php" class="nav-link">
-            <i class="link-icon" data-feather="repeat"></i>
-              
+            <i class="link-icon" data-feather="repeat"></i>           
               <span class="link-title">Daily Expense</span>
             </a>
           </li>
           <li class="nav-item">
             <a href="reports.php" class="nav-link">
-            <i class="link-icon" data-feather="repeat"></i>
-              
+            <i class="link-icon" data-feather="repeat"></i>              
               <span class="link-title">Reports</span>
             </a>
           </li>
@@ -50,8 +48,7 @@
               <i class="link-icon" data-feather="settings"></i>
               <span class="link-title">Setting</span>
             </a>
-          </li>
-         
+          </li>        
         </ul>
       </div>
     </nav>
